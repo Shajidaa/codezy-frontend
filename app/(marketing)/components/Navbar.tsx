@@ -11,10 +11,10 @@ const Navbar = () => {
         <Link href="/courses" className="text-brand-gray hover:text-brand-white transition-colors">Courses</Link>
       </div>
 
-      <button className="bg-brand-gold text-brand-white px-5 py-2 
+      <Link href="/register" className="bg-brand-gold text-brand-white px-5 py-2 
       rounded-lg font-semibold hover:bg-opacity-90 transition-all">
-        Login
-      </button>
+        Register
+      </Link>
     </nav>
   );
 };
