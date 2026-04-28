@@ -27,23 +27,27 @@ const handler = NextAuth({
     })
   ],
   callbacks: {
-    // Add role and ID to the JWT
-    async jwt({ token, user }) {
-      if (user) {
-        token.role = (user as any).role;
-        token.id = (user as any)._id;
-      }
-      return token;
-    },
-    // Add role and ID to the Session object
-    async session({ session, token }) {
-      if (session.user) {
-        (session.user as any).role = token.role;
-        (session.user as any).id = token.id;
-      }
-      return session;
+  async jwt({ token, user }) {
+    if (user) {
+      token.role = (user as any).role;
     }
+    return token;
   },
+  async session({ session, token }) {
+    if (session.user) {
+      (session.user as any).role = token.role;
+    }
+    return session;
+  },
+  // This redirect callback handles cases where 'redirect: true' is used
+  async redirect({ url, baseUrl, token }) {
+    if (url.startsWith(baseUrl)) return url;
+    
+    // Default fallback based on role if no specific callbackUrl is provided
+    if (token?.role === "teacher") return `${baseUrl}/dashboard/teacher`;
+    return `${baseUrl}/dashboard/student`;
+  }
+},
   session: { strategy: "jwt" },
   secret: process.env.NEXTAUTH_SECRET,
   pages: { signIn: '/login' }

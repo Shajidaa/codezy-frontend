@@ -49,41 +49,45 @@ export default function RegisterPage() {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!formData.email || !formData.password) return toast.error("Please fill all fields");
+  e.preventDefault();
+  setIsLoading(true);
 
-    setIsLoading(true);
-    try {
-      // 1. External Express API Call
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/register`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...formData, role }),
-      });
+  try {
+    // 1. Backend Registration
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/register`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...formData, role }),
+    });
 
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Registration failed");
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || "Registration failed");
 
-      // 2. NextAuth Strategy: Immediate Sign In
-      const result = await signIn("credentials", {
-        email: formData.email,
-        password: formData.password,
-        redirect: false,
-      });
+    // 2. NextAuth Sign In
+    const result = await signIn("credentials", {
+      email: formData.email,
+      password: formData.password,
+      redirect: false, // Control redirect manually
+    });
 
-      if (result?.ok) {
-        toast.success("Welcome to Codezy!");
-        router.push("/dashboard");
+    if (result?.ok) {
+      toast.success(`Welcome, ${formData.name}!`);
+      
+      // 3. Role-Based Redirection Logic
+      if (role === 'teacher') {
+        router.push("/dashboard/teacher");
       } else {
-        throw new Error("Login failed after registration");
+        router.push("/dashboard/student");
       }
-    } catch (error: any) {
-      toast.error(error.message || "Something went wrong");
-    } finally {
-      setIsLoading(false);
+    } else {
+      throw new Error("Automatic login failed. Please sign in manually.");
     }
-  };
-
+  } catch (error: any) {
+    toast.error(error.message);
+  } finally {
+    setIsLoading(false);
+  }
+};
   return (
     <div className="min-h-screen bg-[#FDFDFD] flex items-center justify-center p-4 md:p-10 font-sans">
       <motion.div 
