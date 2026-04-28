@@ -64,7 +64,7 @@ export default function RegisterPage() {
 
           <div className="relative z-10 mt-12 pt-10 border-t border-brand-gray/20">
             <p className="text-xs text-brand-gray leading-loose italic">
-              "Codezy isn't just a platform; it's the bridge between learning and professional excellence."
+              Codezy isn&apos;t just a platform; it&apos;s the bridge between learning and professional excellence.
             </p>
           </div>
         </div>

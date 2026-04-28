@@ -1,10 +1,12 @@
 
 import Link from 'next/link';
+import MyContainer from './MyContainer';
 
 const Navbar = () => {
   return (
-    <nav className="bg-brand-dark text-brand-white py-4 px-6 flex justify-between items-center">
-      <div className="text-xl font-bold">CODEZY</div>
+    <nav className="bg-brand-dark ">
+      <MyContainer className="text-brand-white py-4 px-6 flex justify-between items-center">
+ <div className="text-xl font-bold">CODEZY</div>
       
       <div className="space-x-6 hidden md:flex">
         <Link href="/" className="hover:text-brand-gold transition-colors">Home</Link>
@@ -15,6 +17,8 @@ const Navbar = () => {
       rounded-lg font-semibold hover:bg-opacity-90 transition-all">
         Register
       </Link>
+      </MyContainer>
+     
     </nav>
   );
 };
