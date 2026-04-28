@@ -20,7 +20,7 @@ const handler = NextAuth({
         const user = await res.json();
 
         if (res.ok && user) {
-          return user; // Returns user object with role
+          return user; 
         }
         return null;
       }
