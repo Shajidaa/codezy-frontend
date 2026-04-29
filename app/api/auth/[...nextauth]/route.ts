@@ -7,7 +7,8 @@ const handler = NextAuth({
       name: "Credentials",
       credentials: {
         email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" }
+        password: { label: "Password", type: "password" },
+    
       },
       async authorize(credentials) {
         // We fetch from the Express Backend
@@ -26,28 +27,30 @@ const handler = NextAuth({
       }
     })
   ],
-  callbacks: {
-  async jwt({ token, user }) {
-    if (user) {
-      token.role = (user as any).role;
+callbacks: {
+    async jwt({ token, user }: { token: any, user: any }) {
+      if (user) {
+        // No more 'as any' needed!
+        token.role = user.role;
+      }
+      return token;
+    },
+    async session({ session, token }: { session: any, token: any }) {
+      if (session.user) {
+        
+        session.user.role = token.role;
+      }
+      return session;
+    },
+    async redirect({ url, baseUrl, token }: { url: string, baseUrl: string, token?: any }) {
+      if (url.startsWith("/")) return `${baseUrl}${url}`;
+      else if (new URL(url).origin === baseUrl) return url;
+      
+      // Role-based redirection logic
+      if (token?.role === "teacher") return `${baseUrl}/dashboard/teacher`;
+      return `${baseUrl}/dashboard/student`;
     }
-    return token;
   },
-  async session({ session, token }) {
-    if (session.user) {
-      (session.user as any).role = token.role;
-    }
-    return session;
-  },
-  // This redirect callback handles cases where 'redirect: true' is used
-  async redirect({ url, baseUrl, token }) {
-    if (url.startsWith(baseUrl)) return url;
-    
-    // Default fallback based on role if no specific callbackUrl is provided
-    if (token?.role === "teacher") return `${baseUrl}/dashboard/teacher`;
-    return `${baseUrl}/dashboard/student`;
-  }
-},
   session: { strategy: "jwt" },
   secret: process.env.NEXTAUTH_SECRET,
   pages: { signIn: '/login' }

@@ -13,6 +13,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   const userRole = session?.user?.role || 'student';
 
+//  console.log(session);
  
   const navItems = {
     student: [
@@ -31,13 +32,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     <div className="min-h-screen bg-gray-50 flex">
       {/* --- Mobile Sidebar Overlay --- */}
      
-        {isSidebarOpen && (
+        {/* {isSidebarOpen && (
           <motion.div 
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             onClick={() => setSidebarOpen(false)}
             className="fixed inset-0 bg-black/50 z-40 lg:hidden"
           />
-        )}
+        )} */}
     
 
       {/* --- Sidebar --- */}

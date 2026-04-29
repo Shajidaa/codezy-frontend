@@ -118,9 +118,9 @@ export default function RegisterPage() {
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-4">
-                <FloatingInput label="Full Name" type="text" value={formData.name} onChange={(v) => handleInputChange('name', v)} placeholder="Shajida Akter" />
-                <FloatingInput label="Email Address" type="email" value={formData.email} onChange={(v) => handleInputChange('email', v)} placeholder="name@example.com" />
-                <FloatingInput label="Password" type="password" value={formData.password} onChange={(v) => handleInputChange('password', v)} placeholder="••••••••" />
+                <FloatingInput label="Full Name" type="text" value={formData.name} onChange={(v: string) => handleInputChange('name', v)} placeholder="Shajida Akter" />
+                <FloatingInput label="Email Address" type="email" value={formData.email} onChange={(v: string) => handleInputChange('email', v)} placeholder="name@example.com" />
+                <FloatingInput label="Password" type="password" value={formData.password} onChange={(v: string) => handleInputChange('password', v)} placeholder="••••••••" />
               </div>
 
               <AnimatePresence>
@@ -129,7 +129,7 @@ export default function RegisterPage() {
                     <label className="text-[11px] font-black uppercase tracking-widest text-brand-gray mb-2 block px-1">Expertise</label>
                     <select 
                       value={formData.expertise} 
-                      onChange={(e) => handleInputChange('expertise', e.target.value)}
+                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleInputChange('expertise', e.target.value)}
                       className="w-full px-5 py-4 bg-brand-dark/5 border-none rounded-2xl outline-none text-sm font-semibold text-brand-dark"
                     >
                       <option>Full Stack (MERN)</option>
