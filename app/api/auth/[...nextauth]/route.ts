@@ -30,7 +30,7 @@ const handler = NextAuth({
 callbacks: {
     async jwt({ token, user }: { token: any, user: any }) {
       if (user) {
-        // No more 'as any' needed!
+        
         token.role = user.role;
       }
       return token;
@@ -42,14 +42,14 @@ callbacks: {
       }
       return session;
     },
-    async redirect({ url, baseUrl, token }: { url: string, baseUrl: string, token?: any }) {
-      if (url.startsWith("/")) return `${baseUrl}${url}`;
-      else if (new URL(url).origin === baseUrl) return url;
-      
-      // Role-based redirection logic
-      if (token?.role === "teacher") return `${baseUrl}/dashboard/teacher`;
-      return `${baseUrl}/dashboard/student`;
-    }
+   async redirect({ url, baseUrl, token }) {
+ 
+  if (url === '/login' || url === baseUrl) {
+    if (token?.role === "teacher") return `${baseUrl}/dashboard/teacher`;
+    if (token?.role === "student") return `${baseUrl}/dashboard/student`;
+  }
+  return url.startsWith(baseUrl) ? url : baseUrl;
+}
   },
   session: { strategy: "jwt" },
   secret: process.env.NEXTAUTH_SECRET,

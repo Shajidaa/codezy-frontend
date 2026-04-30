@@ -2,7 +2,8 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { signIn } from 'next-auth/react';
+
+import { signIn, getSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { ArrowRight, Sparkles, Lock, Mail, Loader2 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
@@ -16,59 +17,45 @@ export default function LoginPage() {
     password: '',
   });
 
-//   const handleSubmit = async (e: React.FormEvent) => {
-//     e.preventDefault();
-//     setIsLoading(true);
 
-//     try {
-//       const result = await signIn('credentials', {
-//         ...formData,
-//         redirect: false,
-//       });
-
-//       if (result?.error) {
-//         toast.error("Invalid email or password");
-//       } else if (result?.ok) {
-//         toast.success("Welcome back!");
-//         router.refresh();
-//         router.push('/dashboard'); // Middleware handles role-based redirect
-//       }
-//     } catch (error) {
-//       toast.error("An unexpected error occurred");
-//     } finally {
-//       setIsLoading(false);
-//     }
-//   };
 const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
-    // try {
- 
-    //   const result = await signIn('credentials', {
-    //     email: formData.email,
-    //     password: formData.password,
-    //     redirect: false, 
-    //   });
+    try {
+      const result = await signIn('credentials', {
+        email: formData.email,
+        password: formData.password,
+        redirect: false, 
+      });
 
-    //   if (result?.error) {
-   
-    //     toast.error("ভুল ইমেইল অথবা পাসওয়ার্ড!");
-    //   } else if (result?.ok) {
-    //     toast.success("লগইন সফল হয়েছে!");
+      if (result?.error) {
+        toast.error("ভুল ইমেইল অথবা পাসওয়ার্ড!");
+      } else if (result?.ok) {
+        toast.success("লগইন সফল হয়েছে!");
         
-  
-    //     router.refresh();
 
-       
-    //     router.push('/dashboard'); 
-    //   }
-    // } catch (error) {
-    //   toast.error("সার্ভারে সমস্যা হচ্ছে, আবার চেষ্টা করুন।");
-    // } finally {
-    //   setIsLoading(false);
-    // }
-  };
+        const session = await getSession();
+        const role = session?.user?.role;
+
+        router.refresh();
+
+        
+        if (role === 'teacher') {
+          router.push('/dashboard/teacher');
+        } else if (role === 'student') {
+          router.push('/dashboard/student');
+        } else {
+          router.push('/dashboard'); 
+        }
+      }
+    } catch (error) {
+      toast.error("সার্ভারে সমস্যা হচ্ছে, আবার চেষ্টা করুন।");
+    } finally {
+      setIsLoading(false);
+    }
+};
+
   return (
     <div className="min-h-screen bg-[#FDFDFD] flex items-center justify-center p-4 font-sans selection:bg-brand-gold/30">
       {/* Decorative Background */}
@@ -80,7 +67,7 @@ const handleSubmit = async (e: React.FormEvent) => {
       <motion.div 
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="w-full max-w-[480px] bg-white rounded-[2.5rem] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.08)] border border-brand-gray/10 p-8 md:p-12 relative z-10"
+        className="w-full max-w-120 bg-white rounded-[2.5rem] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.08)] border border-brand-gray/10 p-8 md:p-12 relative z-10"
       >
         <div className="text-center mb-10">
           <motion.div 
