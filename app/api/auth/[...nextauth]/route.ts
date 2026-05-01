@@ -30,27 +30,24 @@ const handler = NextAuth({
 callbacks: {
     async jwt({ token, user }: { token: any, user: any }) {
       if (user) {
-        
         token.role = user.role;
       }
       return token;
     },
     async session({ session, token }: { session: any, token: any }) {
       if (session.user) {
-        
         session.user.role = token.role;
       }
       return session;
     },
-   async redirect({ url, baseUrl, token }) {
- 
-  if (url === '/login' || url === baseUrl) {
-    if (token?.role === "teacher") return `${baseUrl}/dashboard/teacher`;
-    if (token?.role === "student") return `${baseUrl}/dashboard/student`;
-  }
-  return url.startsWith(baseUrl) ? url : baseUrl;
-}
-  },
+    // সংশোধিত redirect কলব্যাক
+    async redirect({ url, baseUrl }) {
+      // এটি ডিফল্ট হিসেবে রাখুন
+      if (url.startsWith("/")) return `${baseUrl}${url}`;
+      else if (new URL(url).origin === baseUrl) return url;
+      return baseUrl;
+    }
+},
   session: { strategy: "jwt" },
   secret: process.env.NEXTAUTH_SECRET,
   pages: { signIn: '/login' }
