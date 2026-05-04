@@ -1,89 +1,122 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
+import Image from 'next/image';
+import { FaWhatsapp, FaTimes, FaPaperPlane } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageCircle, X } from 'lucide-react';
 
 
-const WhatsAppWidget = () => {
-  const [isOpen, setIsOpen] = React.useState(false);
 
-  const phoneNumber = process.env.NEXT_PUBLIC_PHONE_NUMBER; 
-  console.log("WhatsApp Widget Phone Number:", phoneNumber); // Debug log
-  const message = "Hello! I'd like to learn more about your services.";
-  const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+const AGENT_IMAGE = "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=100&h=100&auto=format&fit=crop";
+
+export default function WhatsAppLiveWidget() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [message, setMessage] = useState("");
+
+  const handleSendMessage = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!message.trim()) return;
+
+    const encodedMsg = encodeURIComponent(message);
+    const whatsappUrl = `https://wa.me/${process.env.NEXT_PUBLIC_PHONE_NUMBER}?text=${encodedMsg}`;
+    
+    window.open(whatsappUrl, '_blank');
+    setIsOpen(false);
+    setMessage("");
+  };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+    <div className="fixed bottom-6 right-6 z-9999 flex flex-col items-end font-sans">
+      
+      {/* --- Chat Window --- */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.9, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            className="mb-4 w-72 overflow-hidden rounded-2xl bg-white shadow-2xl border border-emerald-100"
+            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.95 }}
+            className="mb-4 w-87.5 overflow-hidden rounded-2xl bg-white shadow-2xl border border-gray-100"
           >
             {/* Header */}
-            <div className="bg-emerald-600 p-4 text-white">
+            <div className="bg-[#075e54] p-4 text-white">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="relative">
-                    <div className="h-10 w-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold">
-                      W
-                    </div>
-                    <span className="absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-emerald-600 bg-green-400" />
+                  <div className="relative h-10 w-10 overflow-hidden rounded-full border-2 border-white/20">
+                    <img
+                      src={AGENT_IMAGE} 
+                      alt="Support Agent" 
+                      fill 
+                      className="object-cover"
+                    />
+                    <div className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-[#075e54] bg-emerald-400" />
                   </div>
                   <div>
-                    <p className="text-sm font-semibold">Support Team</p>
-                    <p className="text-xs opacity-90">Typically replies in minutes</p>
+                    <h3 className="text-sm font-bold">Support Team</h3>
+                    <p className="text-[10px] opacity-80 text-emerald-50">Typically replies in under an hour</p>
                   </div>
                 </div>
                 <button 
                   onClick={() => setIsOpen(false)}
-                  className="rounded-full p-1 hover:bg-emerald-700 transition-colors"
+                  className="rounded-full p-1 hover:bg-white/10 transition-colors"
                 >
-                  <X size={18} />
+                  <FaTimes size={18} />
                 </button>
               </div>
             </div>
 
-            {/* Body */}
-            <div className="bg-emerald-50 p-4">
-              <div className="inline-block rounded-lg bg-white p-3 shadow-sm">
-                <p className="text-sm text-slate-700">
-                  Hi there! 👋 How can we help you today?
-                </p>
+            {/* Chat Body (WhatsApp Background Style) */}
+            <div className="bg-[#e5ddd5] p-4 min-h-30 relative overflow-hidden">
+               {/* Pattern overlay usually goes here */}
+              <div className="relative z-10">
+                <div className="inline-block bg-white px-4 py-2 rounded-xl rounded-tl-none text-sm text-gray-800 shadow-sm border border-gray-200">
+                  <p>Hi there! 👋</p>
+                  <p className="mt-1">How can we help you ?</p>
+                </div>
               </div>
             </div>
 
-            {/* Action */}
-            <div className="bg-white p-4">
-              <a
-                href={whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 rounded-full bg-emerald-600 px-4 py-2 text-sm font-medium text-white transition-transform hover:scale-105 active:scale-95"
+            {/* Input Footer */}
+            <form onSubmit={handleSendMessage} className="p-4 bg-white flex gap-2 border-t">
+              <input 
+                type="text" 
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                placeholder="Type your question..."
+                className="flex-1 bg-gray-100 border-none rounded-full px-4 py-2 text-sm focus:ring-2 focus:ring-[#25d366] outline-none transition-all"
+              />
+              <button 
+                type="submit"
+                disabled={!message.trim()}
+                className="bg-[#25d366] text-white p-2.5 rounded-full hover:bg-[#128c7e] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <MessageCircle size={18} />
-                Start Chat
-              </a>
-            </div>
+                <FaPaperPlane size={14} />
+              </button>
+            </form>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Toggle Button */}
-      <motion.button
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
+      {/* --- Floating Trigger Button --- */}
+      <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex h-14 w-14 items-center justify-center rounded-full bg-emerald-500 text-white shadow-lg transition-colors hover:bg-emerald-600"
-        aria-label="Contact us on WhatsApp"
+        className="relative group flex items-center justify-center h-16 w-16 bg-[#25d366] text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 active:scale-95 overflow-visible"
       >
-        {isOpen ? <X size={28} /> : <MessageCircle size={28} />}
-      </motion.button>
+        {/* Pulse Effect */}
+        <span className="absolute inset-0 rounded-full bg-[#25d366] animate-ping opacity-25 group-hover:hidden" />
+        
+        {isOpen ? (
+          <FaTimes size={28} className="rotate-0" />
+        ) : (
+          <FaWhatsapp size={32} />
+        )}
+
+        {/* Tooltip Label */}
+        {!isOpen && (
+          <span className="absolute right-20 bg-gray-800 text-white text-xs px-3 py-1.5 rounded-md opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+            Need help? Chat with us!
+          </span>
+        )}
+      </button>
     </div>
   );
-};
-
-export default WhatsAppWidget;
+}
