@@ -28,9 +28,9 @@ export default function HomePage() {
               <button className="bg-brand-gold text-brand-white px-8 py-4 rounded-xl font-bold text-lg hover:scale-105 transition-transform flex items-center justify-center gap-2 shadow-lg shadow-brand-gold/20">
                 Start Learning Now <ArrowRight size={20} />
               </button>
-              <button className="border-2 border-brand-dark text-brand-dark px-8 py-4 rounded-xl font-bold text-lg hover:bg-brand-dark hover:text-brand-white transition-all">
-                Browse Library
-              </button>
+              <Link href="/DemoBooking" className="border-2 border-brand-dark text-brand-dark px-8 py-4 rounded-xl font-bold text-lg hover:bg-brand-dark hover:text-brand-white transition-all">
+                Book a Free Demo
+              </Link>
             </div>
           </div>
         </div>
