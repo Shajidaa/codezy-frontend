@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { toast } from "react-toastify";
 
 // প্রোফেশনাল টাইম স্লট জেনারেটর
 const TIME_SLOTS = ["10:00 AM", "11:00 AM", "02:00 PM", "04:00 PM", "07:00 PM", "09:00 PM"];
@@ -18,7 +19,7 @@ export default function ProfessionalBookingForm() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!selectedDate || !selectedTime) return alert("Please select Date and Time");
+    if (!selectedDate || !selectedTime) return toast.error("Please select Date and Time");
     
     setLoading(true);
     const formData = new FormData(e.currentTarget);
