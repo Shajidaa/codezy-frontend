@@ -45,7 +45,7 @@ export default function WhatsAppLiveWidget() {
                     <img
                       src={AGENT_IMAGE} 
                       alt="Support Agent" 
-                      fill 
+                      
                       className="object-cover"
                     />
                     <div className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-[#075e54] bg-emerald-400" />
