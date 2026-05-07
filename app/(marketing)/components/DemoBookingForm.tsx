@@ -13,7 +13,7 @@ export default function ProfessionalBookingForm() {
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
 
-  // আজকের তারিখ থেকে পরবর্তী ৭ দিন পর্যন্ত বুকিং লিমিট করা (Professional logic)
+
   const today = new Date().toISOString().split("T")[0];
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -29,7 +29,7 @@ export default function ProfessionalBookingForm() {
     };
 
     try {
-      const response = await fetch("http://localhost:5000/api/leads/demo", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/leads/demo`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
