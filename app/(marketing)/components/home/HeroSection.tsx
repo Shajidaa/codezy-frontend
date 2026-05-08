@@ -9,7 +9,7 @@ export default function HeroSection() {
     <section className="relative w-full overflow-hidden bg-brand-white">
       {/* Main Container */}
       <div 
-        className="relative flex min-h-[600px] flex-col items-center justify-center bg-brand-dark px-6 pb-24 pt-20 text-center"
+        className="relative flex min-h-150 flex-col items-center justify-center bg-brand-dark px-6 pb-24 pt-20 text-center"
         style={{ 
           clipPath: 'ellipse(100% 85% at 50% 15%)' 
         }}
@@ -46,9 +46,9 @@ export default function HeroSection() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4">
-              <button className="bg-brand-gold text-brand-white px-8 py-4 rounded-xl font-bold text-lg hover:scale-105 transition-transform flex items-center justify-center gap-2 shadow-lg shadow-brand-gold/20">
+              <Link href="/courses" className="bg-brand-gold text-brand-white px-8 py-4 rounded-xl font-bold text-lg hover:scale-105 transition-transform flex items-center justify-center gap-2 shadow-lg shadow-brand-gold/20">
                 Start Learning Now <ArrowRight size={20} />
-              </button>
+              </Link>
               <Link href="/DemoBooking" className="border-2 bg-amber-50 border-brand-dark
                text-brand-dark px-8 py-4 rounded-xl font-bold text-lg
                 hover:bg-brand-gold hover:text-brand-white transition-all">
