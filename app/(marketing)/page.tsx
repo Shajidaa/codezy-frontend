@@ -1,14 +1,14 @@
-import React from 'react';
-import Link from 'next/link';
+
 import { ArrowRight, BookOpen, Code2, Sparkles } from 'lucide-react';
 import HeroSection from './components/home/HeroSection';
+import Text from './components/home/Text';
 
 export default function HomePage() {
   return (
     <div className="bg-brand-white min-h-screen">
       {/* Hero Section */}
       <HeroSection/>
-     
+     <Text/>
 
       {/* Feature Cards */}
       <section className="py-24 bg-brand-dark/5">
