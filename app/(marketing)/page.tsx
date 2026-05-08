@@ -2,6 +2,7 @@
 import { ArrowRight, BookOpen, Code2, Sparkles } from 'lucide-react';
 import HeroSection from './components/home/HeroSection';
 import Text from './components/home/Text';
+import CourseSection from './components/home/courseSection';
 
 export default function HomePage() {
   return (
@@ -9,7 +10,7 @@ export default function HomePage() {
       {/* Hero Section */}
       <HeroSection/>
      <Text/>
-
+<CourseSection/>
       {/* Feature Cards */}
       <section className="py-24 bg-brand-dark/5">
         <div className="max-w-7xl mx-auto px-6">
