@@ -12,7 +12,8 @@ export default function HeroSection() {
     <section className="relative w-full overflow-hidden bg-brand-white">
       {/* Main Container */}
       <div 
-        className="relative flex min-h-150 flex-col items-center justify-center bg-brand-dark px-6 pb-24 pt-20 text-center"
+        className="relative flex 
+         flex-col items-center justify-center bg-brand-dark  pb-8 pt-10 text-center"
         style={{ 
           clipPath: 'ellipse(100% 85% at 50% 15%)' 
         }}
@@ -161,7 +162,7 @@ export default function HeroSection() {
           </div>
 
           {/* Fun Stats Bar */}
-          <div className="mt-12 flex flex-wrap justify-center gap-8 animate-slide-up animation-delay-600">
+          {/* <div className="mt-12 flex flex-wrap justify-center gap-8 animate-slide-up animation-delay-600">
             <div className="text-center group hover:scale-110 transition-transform duration-300">
               <div className="text-3xl font-bold text-brand-gold">10K+</div>
               <div className="text-xs text-brand-gray">Happy Students</div>
@@ -174,7 +175,7 @@ export default function HeroSection() {
               <div className="text-3xl font-bold text-brand-gold">24/7</div>
               <div className="text-xs text-brand-gray">Mentor Support</div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
 

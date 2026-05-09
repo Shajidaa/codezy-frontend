@@ -207,7 +207,7 @@ const CourseCard: React.FC<{ course: typeof coursesData[0] }> = ({ course }) => 
   );
 };
 
-// Main component with brand colors
+// Main component with brand colors and curved background
 const CourseSection: React.FC = () => {
   const [searchTerm, setSearchTerm] = React.useState("");
   const [activeCategory, setActiveCategory] = React.useState("all");
@@ -226,87 +226,105 @@ const CourseSection: React.FC = () => {
   });
 
   return (
-    <section className="py-16 px-4 bg-gradient-to-b from-[#FFFFFF] to-[#FFFFFF]/95 dark:from-[#393536] dark:to-[#393536]/95">
-      <div className="max-w-7xl mx-auto">
-        {/* Header section */}
-        
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#EEB30D]/10 text-[#EEB30D] text-sm font-medium mb-4">
-            <Sparkles size={16} />
-            <span>250+ hours of content</span>
-          </div>
-          <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-[#393536] to-[#949293] dark:from-[#FFFFFF] dark:to-[#949293] bg-clip-text text-transparent mb-4">
-            Explore free interactive coding lessons
-          </h1>
-          <p className="text-lg text-[#949293] max-w-2xl mx-auto">
-            Learn to code with fun, interactive courses handcrafted by industry experts and educators.
-          </p>
+    <div  className="relative">
+      {/* Main section with curved bottom */}
+      <section   
+      className="relative py-16 px-4 bg-gradient-to-b from-[#FFFFFF] to-[#FFFFFF]/95 dark:from-[#393536] dark:to-[#393536]/95 overflow-hidden">
+        {/* Bottom curve SVG */}
+        <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0]">
+          <svg
+            className="relative block w-full h-[50px] md:h-[70px]"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 1200 120"
+            preserveAspectRatio="none"
+          >
+            <path
+              d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z"
+              className="fill-[#EEB30D] opacity-20"
+            ></path>
+          </svg>
         </div>
 
-        {/* Search and filters bar */}
-        <div className="flex flex-col md:flex-row gap-4 mb-12">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[#949293]" size={20} />
-            <input
-              type="text"
-              placeholder="Search courses..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 rounded-xl border border-[#949293]/20 bg-[#FFFFFF] dark:bg-[#393536] text-[#393536] dark:text-[#FFFFFF] placeholder:text-[#949293]/60 focus:outline-none focus:ring-2 focus:ring-[#EEB30D] focus:border-transparent transition-all"
-            />
-          </div>
-          
-          <div className="flex flex-wrap gap-2">
-            {categories.map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => setActiveCategory(cat.id)}
-                className={`
-                  flex items-center gap-2 px-4 py-2 rounded-xl font-medium text-sm transition-all duration-200
-                  ${activeCategory === cat.id
-                    ? 'bg-[#EEB30D] text-[#393536] shadow-md shadow-[#EEB30D]/20'
-                    : 'bg-[#FFFFFF] dark:bg-[#393536] text-[#949293] border border-[#949293]/20 hover:bg-[#EEB30D]/5'
-                  }
-                `}
-              >
-                {cat.icon}
-                {cat.name}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Results count */}
-        <div className="flex justify-between items-center mb-6">
-          <p className="text-sm text-[#949293]">
-            Showing <span className="font-semibold text-[#393536] dark:text-[#FFFFFF]">{filteredCourses.length}</span> courses
-          </p>
-          <div className="flex items-center gap-2 text-sm text-[#949293]">
-            <Users size={16} />
-            <span>Join 100k+ learners worldwide</span>
-          </div>
-        </div>
-
-        {/* Course grid */}
-        {filteredCourses.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredCourses.map((course) => (
-              <CourseCard key={course.id} course={course} />
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-16">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#EEB30D]/10 mb-4">
-              <Search size={32} className="text-[#EEB30D]" />
+        <div  className="max-w-7xl mx-auto relative z-10">
+          {/* Header section */}
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#EEB30D]/10 text-[#EEB30D] text-sm font-medium mb-4">
+              <Sparkles size={16} />
+              <span>250+ hours of content</span>
             </div>
-            <h3 className="text-xl font-semibold text-[#393536] dark:text-[#FFFFFF] mb-2">No courses found</h3>
-            <p className="text-[#949293]">
-              Try adjusting your search or filter to find what you&apos;re looking for.
+            <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-[#393536] to-[#949293] dark:from-[#FFFFFF] dark:to-[#949293] bg-clip-text text-transparent mb-4">
+              Explore free interactive coding lessons
+            </h1>
+            <p className="text-lg text-[#949293] max-w-2xl mx-auto">
+              Learn to code with fun, interactive courses handcrafted by industry experts and educators.
             </p>
           </div>
-        )}
-      </div>
-    </section>
+
+          {/* Search and filters bar */}
+          <div className="flex flex-col md:flex-row gap-4 mb-12">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[#949293]" size={20} />
+              <input
+                type="text"
+                placeholder="Search courses..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-3 rounded-xl border border-[#949293]/20 bg-[#FFFFFF] dark:bg-[#393536] text-[#393536] dark:text-[#FFFFFF] placeholder:text-[#949293]/60 focus:outline-none focus:ring-2 focus:ring-[#EEB30D] focus:border-transparent transition-all"
+              />
+            </div>
+            
+            <div className="flex flex-wrap gap-2">
+              {categories.map((cat) => (
+                <button
+                  key={cat.id}
+                  onClick={() => setActiveCategory(cat.id)}
+                  className={`
+                    flex items-center gap-2 px-4 py-2 rounded-xl font-medium text-sm transition-all duration-200
+                    ${activeCategory === cat.id
+                      ? 'bg-[#EEB30D] text-[#393536] shadow-md shadow-[#EEB30D]/20'
+                      : 'bg-[#FFFFFF] dark:bg-[#393536] text-[#949293] border border-[#949293]/20 hover:bg-[#EEB30D]/5'
+                    }
+                  `}
+                >
+                  {cat.icon}
+                  {cat.name}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Results count */}
+          <div className="flex justify-between items-center mb-6">
+            <p className="text-sm text-[#949293]">
+              Showing <span className="font-semibold text-[#393536] dark:text-[#FFFFFF]">{filteredCourses.length}</span> courses
+            </p>
+            <div className="flex items-center gap-2 text-sm text-[#949293]">
+              <Users size={16} />
+              <span>Join 100k+ learners worldwide</span>
+            </div>
+          </div>
+
+          {/* Course grid */}
+          {filteredCourses.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredCourses.map((course) => (
+                <CourseCard key={course.id} course={course} />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-16">
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#EEB30D]/10 mb-4">
+                <Search size={32} className="text-[#EEB30D]" />
+              </div>
+              <h3 className="text-xl font-semibold text-[#393536] dark:text-[#FFFFFF] mb-2">No courses found</h3>
+              <p className="text-[#949293]">
+                Try adjusting your search or filter to find what you&apos;re looking for.
+              </p>
+            </div>
+          )}
+        </div>
+      </section>
+    </div>
   );
 };
 
