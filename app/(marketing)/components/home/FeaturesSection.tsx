@@ -4,7 +4,7 @@ import React from 'react';
 import { Code2, Trophy, Briefcase, Users, ArrowRight, Star, TrendingUp, Award } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { motion } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 
 export default function FeaturesSection() {
   const features = [
@@ -46,8 +46,12 @@ export default function FeaturesSection() {
     }
   ];
 
+
+
+
+
   // Animation Variants
-  const containerVariants = {
+  const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -55,12 +59,15 @@ export default function FeaturesSection() {
     }
   };
 
-  const itemVariants = {
+  const itemVariants: Variants = {
     hidden: { y: 20, opacity: 0 },
     visible: {
       y: 0,
       opacity: 1,
-      transition: { duration: 0.6, ease: "easeOut" }
+      transition: { 
+        duration: 0.6, 
+        ease: "easeOut" // TypeScript now knows this is a valid Easing value
+      }
     }
   };
 
@@ -102,6 +109,7 @@ export default function FeaturesSection() {
             <motion.div 
               key={index} 
               variants={itemVariants}
+            
               className="group relative bg-brand-dark rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100"
             >
               {/* Image Section */}
