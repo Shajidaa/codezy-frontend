@@ -195,8 +195,8 @@ const CourseCard: React.FC<{ course: typeof coursesData[0] }> = ({ course }) => 
         {/* Footer with brand colors */}
         <div className="flex items-center justify-between pt-3 border-t border-[#949293]/10">
           <LevelBadge level={course.level} />
-          <Link href="/register" className="text-sm font-medium text-[#EEB30D] hover:text-[#EEB30D]/80 transition-colors flex items-center gap-1 group-hover:gap-2">
-            Enroll Now
+          <Link href="/DemoBooking" className="text-sm font-medium text-[#EEB30D] hover:text-[#EEB30D]/80 transition-colors flex items-center gap-1 group-hover:gap-2">
+            Free Booking
             <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
