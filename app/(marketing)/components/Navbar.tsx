@@ -6,6 +6,7 @@ import { useSession, signOut } from 'next-auth/react';
 import { Menu, X, User, LogOut, LayoutDashboard } from 'lucide-react'; 
 import MyContainer from './MyContainer';
 import Image from 'next/image';
+import Logo from './logo';
 
 const Navbar = () => {
   const { data: session } = useSession();
@@ -22,15 +23,15 @@ const Navbar = () => {
     <nav className="bg-brand-dark sticky top-0 z-50 shadow-md">
       <MyContainer className="text-brand-white py-4 px-6 flex justify-between items-center">
         {/* Logo */}
-        <Link href="/" className="text-2xl flex   items-end font-black tracking-tighter text-brand-white">
+        {/* <Link href="/" className="text-2xl flex   items-end font-black tracking-tighter text-brand-white">
          
          <div className="flex items-center">
           <Image width={40} height={40} src="/logo.jpg" alt="Codezy Logo" className="h-15 w-auto" />
         <span className="ml-2 text-brand-gold">Codezy</span>
           </div>
         <span className=" text-start text-sm text-brand-gray">Academy</span>
-        </Link>
-
+        </Link> */}
+<Logo/>
         {/* Desktop Navigation Links */}
         <div className="hidden md:flex items-center space-x-8">
           {navLinks.map((link) => (
