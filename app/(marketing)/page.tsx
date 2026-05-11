@@ -4,6 +4,7 @@ import HeroSection from './components/home/HeroSection';
 import Text from './components/home/Text';
 import CourseSection from './components/home/courseSection';
 import FeaturesSection from './components/home/FeaturesSection';
+import HeroFuture from './components/home/HeroFuture';
 
 export default function HomePage() {
   return (
@@ -12,6 +13,7 @@ export default function HomePage() {
       <HeroSection/>
      <Text/>
 <CourseSection/>
+<HeroFuture/>
       {/* Feature Cards */}
       <FeaturesSection/>
 
