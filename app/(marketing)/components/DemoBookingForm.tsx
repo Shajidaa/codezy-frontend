@@ -1,7 +1,9 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "react-toastify";
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 
 // প্রোফেশনাল টাইম স্লট জেনারেটর
 const TIME_SLOTS = ["10:00 AM", "11:00 AM", "02:00 PM", "04:00 PM", "07:00 PM", "09:00 PM"];
@@ -10,7 +12,7 @@ export default function ProfessionalBookingForm() {
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   
-  // ক্যালেন্ডার এবং টাইম স্টেট
+
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
 
@@ -45,6 +47,7 @@ export default function ProfessionalBookingForm() {
 
   return (
     <div className="max-w-4xl mx-auto my-12 px-4 font-sans">
+      
       <AnimatePresence mode="wait">
         {!submitted ? (
           <motion.div 
@@ -52,7 +55,13 @@ export default function ProfessionalBookingForm() {
             animate={{ opacity: 1, y: 0 }}
             className="bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-100"
           >
-            <div className="grid grid-cols-1 md:grid-cols-3">
+            <div>
+              <Link href="/" className="text-sm
+               flex items-end font-black tracking-tighter text-brand-dark ml-3 mb-8">
+                 Back 
+              </Link>
+              <div className="grid grid-cols-1 md:grid-cols-3">
+              
               {/* লেফট সাইডবার: ক্যালেন্ডার লজিক */}
               <div className="bg-[#393536] p-8 text-white">
                 <h3 className="text-[#EEB30D] text-xl font-bold mb-4">Book a Free Session</h3>
@@ -158,6 +167,8 @@ export default function ProfessionalBookingForm() {
   </form>
 </div>
             </div>
+            </div>
+            
           </motion.div>
         ) : (
           <SuccessMessage onReset={() => setSubmitted(false)} />
