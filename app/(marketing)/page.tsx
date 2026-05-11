@@ -8,7 +8,7 @@ import HeroFuture from './components/home/HeroFuture';
 
 export default function HomePage() {
   return (
-    <div className="bg-brand-white min-h-screen">
+    <div className=" min-h-screen">
       {/* Hero Section */}
       <HeroSection/>
      <Text/>

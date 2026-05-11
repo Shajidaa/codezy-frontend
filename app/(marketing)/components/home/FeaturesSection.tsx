@@ -4,13 +4,14 @@ import React from 'react';
 import { Code2, Trophy, Briefcase, Users, ArrowRight, Star, TrendingUp, Award } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { motion } from 'framer-motion';
 
 export default function FeaturesSection() {
   const features = [
     {
       icon: <Code2 size={28} strokeWidth={1.5} />,
       title: "Level up your learning",
-      description: "Master Python, JavaScript, HTML, and more with real-world projects. Earn verified certificates and unlock achievement badges as you progress through our comprehensive curriculum.",
+      description: "Master Python, JavaScript, HTML, and more with real-world projects. Earn verified certificates and unlock achievement badges.",
       image: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&h=600&fit=crop",
       alt: "Developer coding on laptop",
       stats: "15+ languages",
@@ -19,7 +20,7 @@ export default function FeaturesSection() {
     {
       icon: <Trophy size={28} strokeWidth={1.5} />,
       title: "Practice your coding chops",
-      description: "Challenge yourself with 500+ algorithmic problems and real-world scenarios. Sharpen your problem-solving skills with instant feedback and detailed solutions.",
+      description: "Challenge yourself with 500+ algorithmic problems. Sharpen your skills with instant feedback and detailed solutions.",
       image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&h=600&fit=crop",
       alt: "Code on screen",
       stats: "500+ challenges",
@@ -28,7 +29,7 @@ export default function FeaturesSection() {
     {
       icon: <Briefcase size={28} strokeWidth={1.5} />,
       title: "Build an awesome portfolio",
-      description: "Create production-ready applications, from freelance websites to mobile apps. Showcase your work on GitHub, Behance, or LinkedIn with our portfolio builder tools.",
+      description: "Create production-ready applications. Showcase your work on GitHub, Behance, or LinkedIn with our builder tools.",
       image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&h=600&fit=crop",
       alt: "Portfolio projects showcase",
       stats: "50+ templates",
@@ -37,7 +38,7 @@ export default function FeaturesSection() {
     {
       icon: <Users size={28} strokeWidth={1.5} />,
       title: "Join a motivating community",
-      description: "Connect with 50,000+ developers worldwide. Participate in hackathons, code reviews, and pair programming sessions that accelerate your growth.",
+      description: "Connect with 50,000+ developers worldwide. Participate in hackathons and pair programming sessions.",
       image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&h=600&fit=crop",
       alt: "Developers collaborating",
       stats: "50k+ members",
@@ -45,12 +46,36 @@ export default function FeaturesSection() {
     }
   ];
 
+  // Animation Variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.2 }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: { duration: 0.6, ease: "easeOut" }
+    }
+  };
+
   return (
-    <section className="bg-gradient-to-b from-brand-white via-gray-50/30 to-brand-white py-24 px-6">
+    <section className="bg-brand-dark py-24 px-6 overflow-hidden">
       <div className="max-w-7xl mx-auto">
+        
         {/* Section Header */}
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 bg-brand-gold/10 backdrop-blur-sm px-5 py-2 rounded-full mb-5 border border-brand-gold/20">
+        <motion.div 
+          initial={{ opacity: 0, y: -20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mb-16"
+        >
+          <div className="inline-flex items-center gap-2 bg-brand-gold/10 px-5 py-2 rounded-full mb-5 border border-brand-gold/20">
             <TrendingUp size={16} className="text-brand-gold" />
             <span className="text-sm font-semibold text-brand-gold">Trusted by 50,000+ developers</span>
           </div>
@@ -61,38 +86,41 @@ export default function FeaturesSection() {
           </h2>
           
           <p className="text-brand-gray text-lg max-w-2xl mx-auto leading-relaxed">
-            Join thousands of developers who leveled up their skills with our comprehensive learning platform
+            Join thousands of developers who leveled up their skills with our comprehensive learning platform.
           </p>
-        </div>
+        </motion.div>
 
         {/* Features Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <motion.div 
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: false, margin: "-100px" }}
+          className="grid grid-cols-1 md:grid-cols-2 gap-8"
+        >
           {features.map((feature, index) => (
-            <div 
+            <motion.div 
               key={index} 
-              className="group relative bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 hover:-translate-y-1 border border-gray-100"
+              variants={itemVariants}
+              className="group relative bg-brand-dark rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100"
             >
               {/* Image Section */}
-              <div className="relative h-56 overflow-hidden">
+              <div className="relative h-64 overflow-hidden">
                 <img
                   src={feature.image}
                   alt={feature.alt}
                  
-                  className="object-cover group-hover:scale-110 transition-transform duration-700"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  className="object-cover group-hover:scale-105 transition-transform duration-700"
                 />
-                {/* Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-brand-dark/80 via-transparent to-transparent" />
                 
-                {/* Badge */}
                 <div className="absolute top-4 right-4 z-10">
-                  <span className="bg-brand-gold text-brand-dark px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+                  <span className="bg-brand-gold text-brand-dark px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider shadow-lg">
                     {feature.badge}
                   </span>
                 </div>
                 
-                {/* Stats Badge */}
-                <div className="absolute bottom-4 left-4 z-10 backdrop-blur-md bg-black/50 rounded-lg px-3 py-1.5">
+                <div className="absolute bottom-4 left-4 z-10 backdrop-blur-md bg-white/10 rounded-lg px-3 py-1.5 border border-white/20">
                   <div className="flex items-center gap-2">
                     <Award size={14} className="text-brand-gold" />
                     <span className="text-white text-xs font-semibold">{feature.stats}</span>
@@ -101,75 +129,73 @@ export default function FeaturesSection() {
               </div>
               
               {/* Content Section */}
-              <div className="p-6">
-                <div className="flex items-start gap-4">
-                  {/* Icon */}
+              <div className="p-8">
+                <div className="flex items-start gap-5">
                   <div className="flex-shrink-0">
-                    <div className="p-2.5 bg-brand-gold/10 rounded-xl text-brand-gold group-hover:bg-brand-gold group-hover:text-white transition-all duration-300">
+                    <div className="p-3 bg-brand-gold/10 rounded-2xl text-brand-gold group-hover:bg-brand-gold group-hover:text-brand-white transition-colors duration-300">
                       {feature.icon}
                     </div>
                   </div>
                   
-                  {/* Text Content */}
                   <div className="flex-1">
-                    <h3 className="text-xl font-bold text-brand-dark mb-3 group-hover:text-brand-gold transition-colors duration-300">
+                    <h3 className="text-2xl font-bold text-brand-dark mb-3 group-hover:text-brand-gold transition-colors duration-300">
                       {feature.title}
                     </h3>
-                    <p className="text-brand-gray leading-relaxed text-base">
+                    <p className="text-brand-gray leading-relaxed mb-6">
                       {feature.description}
                     </p>
                     
-                    {/* Learn More Link */}
                     <Link 
                       href="/courses" 
-                      className="inline-flex items-center gap-2 mt-4 text-brand-gold font-medium text-sm hover:gap-3 transition-all duration-300"
+                      className="inline-flex items-center gap-2 text-brand-gold font-bold text-sm uppercase tracking-widest group/link"
                     >
                       <span>Explore path</span>
-                      <ArrowRight size={14} className="group-hover/link:translate-x-1 transition-transform" />
+                      <ArrowRight size={16} className="group-hover/link:translate-x-1 transition-transform" />
                     </Link>
                   </div>
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
 
         {/* Bottom CTA */}
-        <div className="text-center mt-16 pt-8">
-          <div className="inline-flex flex-col sm:flex-row items-center gap-4">
+        <motion.div 
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+          viewport={{ once: true }}
+          className="text-center mt-20"
+        >
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
             <Link 
               href="/courses" 
-              className="inline-flex items-center gap-2 bg-brand-gold text-brand-dark px-8 py-3.5 rounded-xl font-semibold hover:bg-brand-gold/90 transition-all duration-300 shadow-lg hover:shadow-xl group"
+              className="bg-brand-gold text-brand-dark px-10 py-4 rounded-xl font-bold hover:scale-105 transition-transform shadow-lg shadow-brand-gold/20"
             >
-              <span>Explore all learning paths</span>
-              <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform duration-300" />
+              Start Learning Now
             </Link>
             
             <Link 
               href="/pricing" 
-              className="inline-flex items-center gap-2 text-brand-gray font-medium px-6 py-3.5 rounded-xl hover:bg-gray-50 transition-all duration-300"
+              className="flex items-center gap-2 text-brand-gray font-semibold hover:text-brand-dark transition-colors"
             >
-              <span>View pricing plans</span>
-              <Star size={16} />
+              View pricing plans
+              <Star size={18} className="text-brand-gold" />
             </Link>
           </div>
           
-          {/* Trust indicators */}
-          <div className="flex items-center justify-center gap-6 mt-8 text-sm text-brand-gray">
-            <div className="flex items-center gap-2">
-              <div className="w-1.5 h-1.5 bg-brand-gold rounded-full" />
-              <span>No credit card required</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-1.5 h-1.5 bg-brand-gold rounded-full" />
-              <span>14-day free trial</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-1.5 h-1.5 bg-brand-gold rounded-full" />
-              <span>Cancel anytime</span>
-            </div>
+          <div className="flex flex-wrap items-center justify-center gap-8 mt-12 text-sm font-medium text-brand-gray/70">
+            <span className="flex items-center gap-2">
+              <span className="w-1.5 h-1.5 bg-brand-gold rounded-full" /> No credit card required
+            </span>
+            <span className="flex items-center gap-2">
+              <span className="w-1.5 h-1.5 bg-brand-gold rounded-full" /> 14-day free trial
+            </span>
+            <span className="flex items-center gap-2">
+              <span className="w-1.5 h-1.5 bg-brand-gold rounded-full" /> Cancel anytime
+            </span>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
