@@ -3,8 +3,10 @@ import Link from 'next/link';
 
 import { Clock, BookOpen, ArrowRight, Star } from 'lucide-react';
 import { DUMMY_COURSES } from '@/app/types/course';
+import CourseSection from '../components/home/courseSection';
 
 export default function CoursePage() {
+  
   return (
     <div className="min-h-screen bg-[#FFFFFF] font-sans">
       {/* Hero Header Section */}
@@ -23,70 +25,7 @@ export default function CoursePage() {
       </section>
 
       {/* Main Course Grid */}
-      <main className="max-w-7xl mx-auto py-16 px-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-          {DUMMY_COURSES.map((course) => {
-            const IconComponent = course.icon;
-            
-            return (
-              <div 
-                key={course.id}
-                className="group flex flex-col bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-300"
-              >
-                {/* Thumbnail Container */}
-                <div className="relative h-48 w-full overflow-hidden">
-                  <img 
-                    src={course.thumbnail} 
-                    alt={course.title}
-                    className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
-                  />
-                  <div className="absolute top-4 left-4 bg-[#393536]/80 backdrop-blur-md text-white p-2 rounded-xl">
-                    <IconComponent size={20} className="text-[#EEB30D]" />
-                  </div>
-                  {/* Floating Level Tag */}
-                  <div className="absolute bottom-4 right-4 bg-[#EEB30D] text-[#393536] px-3 py-1 rounded-lg text-xs font-black uppercase">
-                    {course.level}
-                  </div>
-                </div>
-
-                {/* Content */}
-                <div className="p-5 flex flex-col flex-grow">
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="text-[#949293] text-xs font-bold uppercase tracking-tighter">
-                      Target: {course.ageRange}
-                    </span>
-                  </div>
-
-                  <h3 className="text-xl font-bold text-[#393536] mb-4 group-hover:text-[#EEB30D] transition-colors leading-tight min-h-[3.5rem]">
-                    {course.title}
-                  </h3>
-
-                  {/* Course Stats */}
-                  <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-50">
-                    <div className="flex items-center gap-1 text-[#949293]">
-                      <Clock size={14} />
-                      <span className="text-xs font-medium">{course.duration}</span>
-                    </div>
-                    <div className="flex items-center gap-1 text-[#949293]">
-                      <BookOpen size={14} />
-                      <span className="text-xs font-medium">{course.lessons} Lessons</span>
-                    </div>
-                  </div>
-
-                  {/* CTA Button */}
-                  <Link 
-                    href={`/courses/${course.id}`}
-                    className="mt-5 w-full flex items-center justify-center gap-2 py-3 bg-[#393536] text-white rounded-xl font-bold hover:bg-[#EEB30D] hover:text-[#393536] transition-all group/btn"
-                  >
-                    View Curriculum
-                    <ArrowRight size={18} className="group-hover/btn:translate-x-1 transition-transform" />
-                  </Link>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </main>
+      <CourseSection/>
     </div>
   );
 }

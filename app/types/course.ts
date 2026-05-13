@@ -1,16 +1,31 @@
 // types/course.ts
+// export interface Course {
+//   id: string;
+//   title: string;
+//   ageRange: string;
+//   level: 'Beginner' | 'Intermediate' | 'Advanced';
+//   duration: string;
+//   lessons: number;
+//   color: string; // Used for card accents
+//   icon: string;
+//   thumbnail: string;
+// }
 export interface Course {
-  id: string;
+  _id?: string;
+  id: number;
   title: string;
-  ageRange: string;
-  level: 'Beginner' | 'Intermediate' | 'Advanced';
+  description: string;
+  level: string;
+  category: string;
   duration: string;
-  lessons: number;
-  color: string; // Used for card accents
-  icon: string;
-  thumbnail: string;
+  students: number;
+  rating: number;
+  isNew: boolean;
+  iconName: string;
+  color: string;
+  image: string;
+  imageAlt: string;
 }
-
 import { 
   Rocket, 
   Gamepad2, 

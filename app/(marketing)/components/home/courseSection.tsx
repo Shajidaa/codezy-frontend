@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Code, Layout, Palette, Braces, Database, Sparkles, TrendingUp, Users, Clock, BookOpen, Star, AlertCircle } from 'lucide-react';
 import Link from 'next/link';
+// import { Course } from '@/app/types/course';
 
 // 1. Icon Mapping System
 // Since the backend stores strings, we map them back to Lucide components here
@@ -123,7 +124,7 @@ const CourseSection: React.FC = () => {
     const fetchCourses = async () => {
       try {
         setLoading(true);
-        // Replace with your actual production URL when deploying
+     
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/courses`);
         if (!response.ok) throw new Error("Failed to fetch");
         const data = await response.json();
