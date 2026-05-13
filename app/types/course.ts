@@ -1,15 +1,5 @@
 // types/course.ts
-// export interface Course {
-//   id: string;
-//   title: string;
-//   ageRange: string;
-//   level: 'Beginner' | 'Intermediate' | 'Advanced';
-//   duration: string;
-//   lessons: number;
-//   color: string; // Used for card accents
-//   icon: string;
-//   thumbnail: string;
-// }
+
 export interface Course {
   _id?: string;
   id: number;
