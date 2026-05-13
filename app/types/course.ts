@@ -109,3 +109,10 @@ export const DUMMY_COURSES = [
     thumbnail: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=800&auto=format&fit=crop',
   }
 ];
+
+// Benefit object type definition
+export interface Benefit {
+  title: string;
+  desc: string;
+  icon: React.ReactNode;
+}
