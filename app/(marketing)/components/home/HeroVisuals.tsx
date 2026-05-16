@@ -17,19 +17,7 @@ export const HeroVisuals = ({ level, image, icon }: HeroVisualsProps) => {
         src={image}
         alt={isKids ? "Young students coding together" : "Young developers collaborating"}
         className="w-full h-full object-cover"
-        onError={(e) => {
-          const target = e.target as HTMLImageElement;
-          target.style.display = "none";
-          const parent = target.parentElement;
-          if (parent) {
-            parent.style.background = "linear-gradient(135deg, #2c2418, #1e1915)";
-            const overlay = document.createElement("div");
-            overlay.className =
-              "w-full h-full flex items-center justify-center text-brand-gold font-bold text-2xl gap-2";
-            overlay.innerHTML = `${icon} ${isKids ? "Code Explorers" : "Next-Gen Innovators"}`;
-            parent.appendChild(overlay);
-          }
-        }}
+      
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
       <div className="absolute bottom-4 left-4 bg-black/60 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-medium flex items-center gap-1">

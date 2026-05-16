@@ -1,8 +1,4 @@
 
-import Link from 'next/link';
-
-import { Clock, BookOpen, ArrowRight, Star } from 'lucide-react';
-import { DUMMY_COURSES } from '@/app/types/course';
 import CourseSection from '../components/home/courseSection';
 
 export default function CoursePage() {

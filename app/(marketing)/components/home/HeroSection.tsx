@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+
 import { Terminal, Code2, Cpu, Laptop, Binary, Brackets, Blocks, Database, ArrowRight, 
          Sparkles, Rocket, Star, Gamepad2, Bot, Smile, Brain, Trophy, 
          Code,
@@ -154,7 +154,7 @@ export default function HeroSection() {
               <ArrowRight size={20} className="group-hover:translate-x-2 group-hover:scale-110 transition-all duration-300" />
       
             </Link>
-            <Link href="/DemoBooking" 
+            <Link href="/booking" 
               className="group border-2 bg-amber-50 border-brand-dark text-brand-dark px-8 py-4 rounded-xl font-bold text-lg hover:bg-brand-gold hover:text-brand-white hover:border-brand-gold transition-all duration-300 hover:scale-105 hover:shadow-xl flex items-center gap-2">
               <span>Book a Free Demo</span>
               <Brain size={18} className="group-hover:animate-pulse-gentle" />
