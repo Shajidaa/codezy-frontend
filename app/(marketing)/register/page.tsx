@@ -205,9 +205,14 @@ export default function RegisterPage() {
                   <>Get Started <ArrowRight size={18} strokeWidth={2.5} /></>
                 )}
               </motion.button>
-                 <div>
-        <p>Do you have an account? <Link href="/login" className="text-[#EEB30D] hover:underline">Login here</Link></p>
-      </div>
+              <div className="text-center mt-4">
+                <p className="text-sm text-[#949293] font-medium">
+                  Do you have an account?{' '}
+                  <Link href="/login" className="text-[#EEB30D] hover:underline font-bold">
+                    Login here
+                  </Link>
+                </p>
+              </div>
             </form>
           </div>
           
@@ -234,14 +239,29 @@ function RoleButton({ active, onClick, icon, label }: { active: boolean; onClick
   );
 }
 
-function FloatingInput({ label, type, placeholder, value, onChange, icon, isPassword, showPassword, onTogglePassword }:
-   { label: string;
-    type: string;
-    onChange: (value: string) => void;
-    icon: React.ReactNode;
-    isPassword: boolean;
-    showPassword: boolean;
-    onTogglePassword: () => void;placeholder: string; value: string; }) {
+interface FloatingInputProps {
+  label: string;
+  type: string;
+  onChange: (value: string) => void;
+  icon: React.ReactNode;
+  placeholder: string;
+  value: string;
+  isPassword?: boolean;
+  showPassword?: boolean;
+  onTogglePassword?: () => void;
+}
+
+function FloatingInput({ 
+  label, 
+  type, 
+  placeholder, 
+  value, 
+  onChange, 
+  icon, 
+  isPassword = false, 
+  showPassword = false, 
+  onTogglePassword 
+}: FloatingInputProps) {
   return (
     <div className="group space-y-1.5">
       <label className="text-[11px] font-black uppercase tracking-widest text-[#949293] block px-1 group-focus-within:text-[#EEB30D] transition-colors duration-200">
@@ -261,7 +281,7 @@ function FloatingInput({ label, type, placeholder, value, onChange, icon, isPass
         />
         
         {/* Eye/EyeOff Icon Trigger */}
-        {isPassword && (
+        {isPassword && onTogglePassword && (
           <button
             type="button"
             onClick={onTogglePassword}
@@ -271,7 +291,6 @@ function FloatingInput({ label, type, placeholder, value, onChange, icon, isPass
           </button>
         )}
       </div>
-    
     </div>
   );
 }
