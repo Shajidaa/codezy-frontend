@@ -3,7 +3,7 @@
 import React, { use, useState, useTransition } from "react";
 import Link from "next/link";
 import { ArrowLeft, ShieldCheck, RefreshCw, Loader2, Calendar, CheckCircle2 } from "lucide-react";
-// import { levelsData } from "@/app/data/levels"; 
+
 import { Currency } from "@/app/types";
 import { levelsData } from "@/data/levels-config";
 

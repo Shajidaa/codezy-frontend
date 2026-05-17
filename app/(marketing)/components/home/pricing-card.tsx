@@ -3,6 +3,7 @@
 
 import { Currency, LevelData } from "@/app/types";
 import { CheckCircle2, ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 
 interface PricingCardProps {
@@ -39,9 +40,9 @@ export const PricingCard = ({ activeData, currency }: PricingCardProps) => {
         <span className="font-semibold text-brand-gold block mb-1">🎁 Bonus:</span>
         {activeData.additional}
       </div>
-      <button className="w-full mt-8 bg-brand-gold text-black font-extrabold py-3.5 rounded-xl flex items-center justify-center gap-2 hover:bg-amber-400 transition-all shadow-lg group">
+      <Link href="/enroll" className="w-full mt-8 bg-brand-gold text-black font-extrabold py-3.5 rounded-xl flex items-center justify-center gap-2 hover:bg-amber-400 transition-all shadow-lg group">
         Enroll Now <ArrowRight size={18} className="group-hover:translate-x-1 transition" />
-      </button>
+      </Link>
     </div>
   );
 };
