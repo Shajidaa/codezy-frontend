@@ -49,21 +49,21 @@ export default function EnrollPage({ searchParams }: PageProps) {
     
     startTransition(async () => {
       try {
-        // ব্যাকএন্ড API এর রিকোয়ারমেন্ট অনুযায়ী ডাটা অবজেক্ট তৈরি
+    
         const payload = {
           fullName: formData.fullName,
           email: formData.email,
           phone: formData.phone,
           whatsapp: formData.whatsapp,
           paymentMethod: paymentMethod,
-          // কার্ড পেমেন্ট হলে এই ফিল্ডগুলো নাল পাঠানো হচ্ছে
+
           lastThreeDigits: paymentMethod !== "card" ? formData.lastThreeDigits : null,
           transactionId: paymentMethod !== "card" ? formData.transactionId : null,
           planId: planData.id,
         };
 
-        // ব্যাকএন্ড API এন্ডপয়েন্টে রিকোয়েস্ট পাঠানো হচ্ছে
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/enrollments`, {
+     
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/enrollments`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -86,7 +86,7 @@ export default function EnrollPage({ searchParams }: PageProps) {
     });
   };
 
-  // পেমেন্ট ইনফো সাবমিট করার পরের স্ক্রিন (অনুমোদনের অপেক্ষায়)
+
   if (isSuccess) {
     return (
       <main className="min-h-screen bg-[#0F0E0E] text-white flex items-center justify-center p-4">
