@@ -49,25 +49,44 @@ export default function EnrollPage({ searchParams }: PageProps) {
     
     startTransition(async () => {
       try {
-        // API Route call simulator to backend endpoint
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-        
-        console.log(`Initiating ${paymentMethod} Gateway:`, {
-          user: formData,
+        // ব্যাকএন্ড API এর রিকোয়ারমেন্ট অনুযায়ী ডাটা অবজেক্ট তৈরি
+        const payload = {
+          fullName: formData.fullName,
+          email: formData.email,
+          phone: formData.phone,
+          whatsapp: formData.whatsapp,
           paymentMethod: paymentMethod,
-          amount: priceAmount,
-          plan: planData.id
+          // কার্ড পেমেন্ট হলে এই ফিল্ডগুলো নাল পাঠানো হচ্ছে
+          lastThreeDigits: paymentMethod !== "card" ? formData.lastThreeDigits : null,
+          transactionId: paymentMethod !== "card" ? formData.transactionId : null,
+          planId: planData.id,
+        };
+
+        // ব্যাকএন্ড API এন্ডপয়েন্টে রিকোয়েস্ট পাঠানো হচ্ছে
+        const response = await fetch("http://localhost:5000/api/enrollments", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
         });
 
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || "পেমেন্ট সাবমিট করতে সমস্যা হয়েছে।");
+        }
+
+        console.log("Enrollment success:", data);
         setIsSuccess(true);
-      } catch (error) {
-        console.error("Payment Initiation Error:", error);
-        alert("পেমেন্ট সাবমিট করতে সমস্যা হয়েছে। দয়া করে আবার চেষ্টা করুন।");
+      } catch (error: any) {
+        console.error("Payment Submission Error:", error);
+        alert(error.message || "পেমেন্ট সাবমিট করতে সমস্যা হয়েছে। দয়া করে আবার চেষ্টা করুন।");
       }
     });
   };
 
-  // পেমেন্ট ইনফো সাবমিট করার পরের স্ক্রিন (অনুমোদনের অপেক্ষায়)
+  // পেমেন্ট ইনফো সাবমিট করার পরের স্ক্রিন (অনুমোদনের অপেক্ষায়)
   if (isSuccess) {
     return (
       <main className="min-h-screen bg-[#0F0E0E] text-white flex items-center justify-center p-4">
@@ -75,9 +94,9 @@ export default function EnrollPage({ searchParams }: PageProps) {
           <div className="w-16 h-16 bg-amber-500/10 border border-amber-500/20 text-amber-400 rounded-full flex items-center justify-center mx-auto text-3xl mb-4 animate-pulse">
             ⏳
           </div>
-          <h1 className="text-2xl font-black text-white">তথ্য সফলভাবে জমা হয়েছে!</h1>
+          <h1 className="text-2xl font-black text-white">তথ্য সফলভাবে জমা হয়েছে!</h1>
           <p className="text-neutral-400 text-sm mt-3 leading-relaxed">
-            ধন্যবাদ <strong>{formData.fullName}</strong>! আপনার দেওয়া পেমেন্ট তথ্যটি আমাদের ভেরিফিকেশন টিমের কাছে পাঠানো হয়েছে। ট্রানজেকশন আইডি যাচাই করে খুব শীঘ্রই আপনার ইমেইল (<span className="text-brand-gold">{formData.email}</span>) এবং হোয়াটসঅ্যাপ নাম্বারে কনফার্মেশন মেসেজ পাঠিয়ে দেওয়া হবে।
+            ধন্যবাদ <strong>{formData.fullName}</strong>! আপনার দেওয়া পেমেন্ট তথ্যটি আমাদের ভেরিফিকেশন টিমের কাছে পাঠানো হয়েছে। ট্রানজেকশন আইডি যাচাই করে খুব শীঘ্রই আপনার ইমেইল (<span className="text-brand-gold">{formData.email}</span>) এবং হোয়াটসঅ্যাপ নাম্বারে কনফার্মেশন মেসেজ পাঠিয়ে দেওয়া হবে।
           </p>
           <Link href="/" className="mt-8 block w-full bg-brand-gold text-black font-extrabold py-3.5 rounded-xl text-center hover:bg-amber-400 transition">
             হোমপেজে ফিরে যান
@@ -94,7 +113,7 @@ export default function EnrollPage({ searchParams }: PageProps) {
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 text-sm text-neutral-400 hover:text-white transition group">
             <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-            পেছনে ফিরে যান
+            পেছে ফিরে যান
           </Link>
           <div className="text-xs uppercase tracking-widest text-neutral-500 font-mono flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" /> Secure Bangladeshi Gateway
@@ -270,7 +289,7 @@ export default function EnrollPage({ searchParams }: PageProps) {
                 </div>
               )}
 
-              {/* Dynamic Information Notice based on payment type */}
+              {/* Dynamic Information Notice */}
               <div className="bg-black/30 border border-white/5 p-4 rounded-xl text-xs leading-relaxed text-neutral-400">
                 {paymentMethod === "bkash" && (
                   <p>
@@ -279,12 +298,12 @@ export default function EnrollPage({ searchParams }: PageProps) {
                 )}
                 {paymentMethod === "nagad" && (
                   <p>
-                    <strong className="text-[#F47216]">নগদ ম্যানুয়াল পলিসি:</strong> আমাদের নগদ নম্বরে ক্যাশ ইন/সেন্ড মানি করার পর ভেরিফিকেশনের জন্য শেষ ৩ ডিজিট ও ট্রানজেকশন আইডি সঠিক উপায়ে বক্সে ইনপুট দিন।
+                    <strong className="text-[#F47216]">নগদ ম্যানুয়াল পলিসি:</strong> আমাদের নগদ নম্বরে ক্যাশ ইন/সেন্ড মানি করার পর ভেরিফিকেশনের জন্য শেষ ৩ ডিজিট ও ট্রানজেকশন আইডি সঠিক উপায়ে বক্সে ইনপুট দিন।
                   </p>
                 )}
                 {paymentMethod === "card" && (
                   <p>
-                    <strong className="text-brand-gold">Card Payment Node:</strong> Supports Visa, Mastercard, American Express, and internet banking via securely audited SSL protocols.
+                    <strong className="text-brand-gold">Card Payment Note:</strong> Supports Visa, Mastercard, American Express, and internet banking via securely audited SSL protocols.
                   </p>
                 )}
               </div>
@@ -319,7 +338,7 @@ export default function EnrollPage({ searchParams }: PageProps) {
               <ShieldCheck size={14} className="text-emerald-500" /> সুরক্ষিত ডাটা ট্রান্সফার
             </div>
             <div className="flex items-center gap-1.5">
-              <RefreshCw size={14} className="text-brand-gold" /> ম্যানুয়াল ভেরিফিকেশন (২৪ ঘণ্টার মধ্যে সম্পন্ন হয়)
+              <RefreshCw size={14} className="text-brand-gold" /> ম্যানুয়াল ভেরিফিকেশন (২৪ ঘণ্টার মধ্যে সম্পন্ন হয়)
             </div>
           </div>
         </section>
@@ -365,7 +384,7 @@ export default function EnrollPage({ searchParams }: PageProps) {
             {/* Total Calculation breakdown */}
             <div className="space-y-3 text-sm">
               <div className="flex justify-between text-neutral-400">
-                <span>কোর্সের মেয়াদ</span>
+                <span>কোর্সের মেয়াদ</span>
                 <span className="text-white font-medium">৩ মাস (ফুল এক্সেস)</span>
               </div>
               <div className="flex justify-between text-neutral-400">
