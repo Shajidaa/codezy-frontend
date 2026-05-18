@@ -63,7 +63,7 @@ export default function EnrollPage({ searchParams }: PageProps) {
         };
 
         // ব্যাকএন্ড API এন্ডপয়েন্টে রিকোয়েস্ট পাঠানো হচ্ছে
-        const response = await fetch("http://localhost:5000/api/enrollments", {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/enrollments`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
