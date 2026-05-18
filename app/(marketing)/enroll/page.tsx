@@ -2,7 +2,7 @@
 
 import React, { use, useState, useTransition } from "react";
 import Link from "next/link";
-import { ArrowLeft, ShieldCheck, RefreshCw, Loader2, Calendar, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, ShieldCheck, RefreshCw, Loader2, Calendar } from "lucide-react";
 
 import { Currency } from "@/app/types";
 import { levelsData } from "@/data/levels-config";
@@ -27,6 +27,9 @@ export default function EnrollPage({ searchParams }: PageProps) {
     fullName: "",
     email: "",
     phone: "",
+    whatsapp: "",
+    lastThreeDigits: "",
+    transactionId: "",
   });
   
   const [isPending, startTransition] = useTransition();
@@ -46,11 +49,12 @@ export default function EnrollPage({ searchParams }: PageProps) {
     
     startTransition(async () => {
       try {
-        // API Route call simulator to backend endpoint (e.g., /api/bkash/create-payment)
+        // API Route call simulator to backend endpoint
         await new Promise((resolve) => setTimeout(resolve, 2000));
         
         console.log(`Initiating ${paymentMethod} Gateway:`, {
           user: formData,
+          paymentMethod: paymentMethod,
           amount: priceAmount,
           plan: planData.id
         });
@@ -58,24 +62,25 @@ export default function EnrollPage({ searchParams }: PageProps) {
         setIsSuccess(true);
       } catch (error) {
         console.error("Payment Initiation Error:", error);
-        alert("Payment gateway timeout. Please try again.");
+        alert("পেমেন্ট সাবমিট করতে সমস্যা হয়েছে। দয়া করে আবার চেষ্টা করুন।");
       }
     });
   };
 
+  // পেমেন্ট ইনফো সাবমিট করার পরের স্ক্রিন (অনুমোদনের অপেক্ষায়)
   if (isSuccess) {
     return (
       <main className="min-h-screen bg-[#0F0E0E] text-white flex items-center justify-center p-4">
         <div className="max-w-md w-full text-center border border-white/10 bg-[#181716] p-8 rounded-2xl shadow-2xl">
-          <div className="w-16 h-16 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center mx-auto text-3xl mb-4">
-            ✓
+          <div className="w-16 h-16 bg-amber-500/10 border border-amber-500/20 text-amber-400 rounded-full flex items-center justify-center mx-auto text-3xl mb-4 animate-pulse">
+            ⏳
           </div>
-          <h1 className="text-2xl font-black text-white">পেমেন্ট সফল হয়েছে! 🎉</h1>
+          <h1 className="text-2xl font-black text-white">তথ্য সফলভাবে জমা হয়েছে!</h1>
           <p className="text-neutral-400 text-sm mt-3 leading-relaxed">
-            ধন্যবাদ <strong>{formData.fullName}</strong>! আপনার সিটটি কনফার্ম করা হয়েছে। আপনার ইমেইল (<span className="text-brand-gold">{formData.email}</span>) এবং মোবাইল নাম্বারে ক্লাসের এক্সেস ডিটেইলস পাঠানো হয়েছে।
+            ধন্যবাদ <strong>{formData.fullName}</strong>! আপনার দেওয়া পেমেন্ট তথ্যটি আমাদের ভেরিফিকেশন টিমের কাছে পাঠানো হয়েছে। ট্রানজেকশন আইডি যাচাই করে খুব শীঘ্রই আপনার ইমেইল (<span className="text-brand-gold">{formData.email}</span>) এবং হোয়াটসঅ্যাপ নাম্বারে কনফার্মেশন মেসেজ পাঠিয়ে দেওয়া হবে।
           </p>
           <Link href="/" className="mt-8 block w-full bg-brand-gold text-black font-extrabold py-3.5 rounded-xl text-center hover:bg-amber-400 transition">
-            ড্যাশবোর্ডে যান
+            হোমপেজে ফিরে যান
           </Link>
         </div>
       </main>
@@ -103,7 +108,7 @@ export default function EnrollPage({ searchParams }: PageProps) {
         <section className="lg:col-span-7 space-y-6 lg:order-1 order-2">
           <div className="bg-[#181716] border border-white/10 rounded-2xl p-6 md:p-8 shadow-xl">
             <h1 className="text-2xl md:text-3xl font-black mb-1">স্টুডেন্ট রেজিস্ট্রেশন</h1>
-            <p className="text-neutral-400 text-sm mb-6">আপনার সঠিক তথ্য দিন (এই তথ্য দিয়ে আপনার ড্যাশবোর্ড তৈরি হবে)</p>
+            <p className="text-neutral-400 text-sm mb-6">আপনার সঠিক তথ্য দিন (এই তথ্য দিয়ে আপনার ড্যাশবোর্ড তৈরি হবে)</p>
 
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Inputs */}
@@ -139,7 +144,7 @@ export default function EnrollPage({ searchParams }: PageProps) {
                     />
                   </div>
                   <div>
-                    <label htmlFor="phone" className="block text-sm font-medium text-white/80 mb-2">মোবাইল নাম্বার (বিকাশ নোটিফিকেশনের জন্য) *</label>
+                    <label htmlFor="phone" className="block text-sm font-medium text-white/80 mb-2">মোবাইল নাম্বার (Contact) *</label>
                     <input
                       required
                       type="tel"
@@ -152,6 +157,21 @@ export default function EnrollPage({ searchParams }: PageProps) {
                       className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-gold transition placeholder:text-neutral-600 disabled:opacity-50"
                     />
                   </div>
+                </div>
+
+                <div>
+                  <label htmlFor="whatsapp" className="block text-sm font-medium text-white/80 mb-2">হোয়াটসঅ্যাপ নাম্বার (WhatsApp) *</label>
+                  <input
+                    required
+                    type="tel"
+                    id="whatsapp"
+                    name="whatsapp"
+                    disabled={isPending}
+                    value={formData.whatsapp}
+                    onChange={handleInputChange}
+                    placeholder="01XXXXXXXXX"
+                    className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-gold transition placeholder:text-neutral-600 disabled:opacity-50"
+                  />
                 </div>
               </div>
 
@@ -213,16 +233,53 @@ export default function EnrollPage({ searchParams }: PageProps) {
                 </div>
               </div>
 
+              {/* Dynamic MFS Verification Fields */}
+              {(paymentMethod === "bkash" || paymentMethod === "nagad") && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-white/5">
+                  <div>
+                    <label htmlFor="lastThreeDigits" className="block text-sm font-medium text-white/80 mb-2">
+                      {paymentMethod === "bkash" ? "বিকাশ" : "নগদ"} নাম্বারের শেষ ৩ ডিজিট *
+                    </label>
+                    <input
+                      required
+                      type="text"
+                      maxLength={3}
+                      id="lastThreeDigits"
+                      name="lastThreeDigits"
+                      disabled={isPending}
+                      value={formData.lastThreeDigits}
+                      onChange={handleInputChange}
+                      placeholder="e.g. 452"
+                      className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-gold transition placeholder:text-neutral-600 disabled:opacity-50"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="transactionId" className="block text-sm font-medium text-white/80 mb-2">ট্রানজেকশন আইডি (Transaction ID) *</label>
+                    <input
+                      required
+                      type="text"
+                      id="transactionId"
+                      name="transactionId"
+                      disabled={isPending}
+                      value={formData.transactionId}
+                      onChange={handleInputChange}
+                      placeholder="e.g. 8M93JKX92"
+                      className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-gold transition placeholder:text-neutral-600 disabled:opacity-50"
+                    />
+                  </div>
+                </div>
+              )}
+
               {/* Dynamic Information Notice based on payment type */}
               <div className="bg-black/30 border border-white/5 p-4 rounded-xl text-xs leading-relaxed text-neutral-400">
                 {paymentMethod === "bkash" && (
                   <p>
-                    <strong className="text-[#E2136E]">bKash Checkout Policy:</strong> নিচের বাটনে ক্লিক করার পর আপনাকে বিকাশ পেমেন্ট গেটওয়েতে রিডাইরেক্ট করা হবে। সেখানে ওটিপি (OTP) এবং পিন নাম্বার দিয়ে পেমেন্ট সফলভাবে সম্পন্ন করার সাথে সাথেই এই ওয়েবসাইটটি রিফ্রেশ হয়ে ইনস্ট্যান্ট এক্সেস চালু হয়ে যাবে। কোনো অতিরিক্ত ফি প্রযোজ্য নয়।
+                    <strong className="text-[#E2136E]">bKash Manual Policy:</strong> আমাদের বিকাশ নম্বরে সেন্ড মানি বা পেমেন্ট সম্পন্ন করার পর উপরের বক্সে আপনার বিকাশ নম্বরের শেষ ৩ ডিজিট এবং ট্রানজেকশন আইডি প্রদান করে সাবমিট করুন। আমাদের টিম দ্রুত এটি ভেরিফাই করবে।
                   </p>
                 )}
                 {paymentMethod === "nagad" && (
                   <p>
-                    <strong className="text-[#F47216]">নগদ গেটওয়ে পলিসি:</strong> নগদ ওয়ালেট নম্বর এবং ওটিপি ব্যবহার করে পেমেন্ট করার জন্য অফিসিয়াল পেমেন্ট নোডে রিডাইরেক্ট করা হবে। সিকিউর ট্রানজেকশন নিশ্চিত করুন।
+                    <strong className="text-[#F47216]">নগদ ম্যানুয়াল পলিসি:</strong> আমাদের নগদ নম্বরে ক্যাশ ইন/সেন্ড মানি করার পর ভেরিফিকেশনের জন্য শেষ ৩ ডিজিট ও ট্রানজেকশন আইডি সঠিক উপায়ে বক্সে ইনপুট দিন।
                   </p>
                 )}
                 {paymentMethod === "card" && (
@@ -247,10 +304,10 @@ export default function EnrollPage({ searchParams }: PageProps) {
                 {isPending ? (
                   <>
                     <Loader2 size={20} className="animate-spin text-current" />
-                    গেটওয়ে লোড হচ্ছে, অপেক্ষা করুন...
+                    সাবমিট হচ্ছে, অপেক্ষা করুন...
                   </>
                 ) : (
-                  `${paymentMethod === "bkash" ? "বিকাশ" : paymentMethod === "nagad" ? "নগদ" : "কার্ড"} দিয়ে পেমেন্ট করুন (${priceLabel})`
+                  "পেমেন্ট তথ্য সাবমিট করুন"
                 )}
               </button>
             </form>
@@ -259,10 +316,10 @@ export default function EnrollPage({ searchParams }: PageProps) {
           {/* Secure Badges */}
           <div className="flex flex-wrap items-center justify-center md:justify-start gap-6 text-xs text-neutral-500 px-2">
             <div className="flex items-center gap-1.5">
-              <ShieldCheck size={14} className="text-emerald-500" /> সুরক্ষিত পেমেন্ট গেটওয়ে (SSL Secured)
+              <ShieldCheck size={14} className="text-emerald-500" /> সুরক্ষিত ডাটা ট্রান্সফার
             </div>
             <div className="flex items-center gap-1.5">
-              <RefreshCw size={14} className="text-brand-gold" /> ৭ দিনের রিফান্ড পলিসি প্রযোজ্য
+              <RefreshCw size={14} className="text-brand-gold" /> ম্যানুয়াল ভেরিফিকেশন (২৪ ঘণ্টার মধ্যে সম্পন্ন হয়)
             </div>
           </div>
         </section>
@@ -317,7 +374,7 @@ export default function EnrollPage({ searchParams }: PageProps) {
               </div>
               
               <div className="border-t border-white/5 pt-3 mt-2 flex justify-between items-baseline">
-                <span className="font-bold text-base">সর্বমোট প্রদেয় টাকা:</span>
+                <span className="font-bold text-base">সর্বমোট প্রদেয় টাকা:</span>
                 <span className="text-3xl font-black text-brand-gold tracking-tight">{priceLabel}</span>
               </div>
             </div>
