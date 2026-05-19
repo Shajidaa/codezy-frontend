@@ -50,7 +50,11 @@ export default function RegisterPage() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    school: '',
+    age: '',
+
     password: '',
+
     expertise: 'Full Stack (MERN)'
   });
 
@@ -149,6 +153,23 @@ export default function RegisterPage() {
                   onChange={(v: string) => handleInputChange('email', v)} 
                   placeholder="name@example.com" 
                   icon={<Mail size={18} />}
+                />
+                <FloatingInput 
+                  label="Age" 
+                  type="number" 
+                  value={formData.age} 
+                  onChange={(v: string) => handleInputChange('age', v)} 
+                  placeholder="18"
+                  
+                  icon={<User size={18} />}
+                />
+                <FloatingInput 
+                  label="School" 
+                  type="text" 
+                  value={formData.school} 
+                  onChange={(v: string) => handleInputChange('school', v)} 
+                  placeholder="Your School" 
+                  icon={<GraduationCap size={18} />}
                 />
                 
                 <FloatingInput 
