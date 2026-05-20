@@ -6,6 +6,7 @@ import { LayoutDashboard, BookOpen, Users, Settings, LogOut, Menu, X, Bell } fro
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
+
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { data: session } = useSession();
   const [isSidebarOpen, setSidebarOpen] = useState(false);
@@ -23,7 +24,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     teacher: [
       { name: 'Overview', href: '/dashboard/teacher', icon: LayoutDashboard },
       { name: 'My Classes', href: '/dashboard/teacher/classes', icon: Users },
-    ]
+    ],
+    admin: [
+      { name: 'Admin Panel', href: '/dashboard/admin', icon: Settings },
+      {name:"Students", href:"/dashboard/admin/students", icon: Users},
+      { name: 'User Management', href: '/dashboard/admin/users', icon: Users },
+
+    ],
   };
 
   const currentLinks = navItems[userRole as keyof typeof navItems];

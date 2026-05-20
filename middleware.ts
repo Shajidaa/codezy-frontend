@@ -7,7 +7,7 @@ export default withAuth(
     const token = req.nextauth.token;
     const isTeacherPage = req.nextUrl.pathname.startsWith("/dashboard/teacher");
     const isStudentPage = req.nextUrl.pathname.startsWith("/dashboard/student");
-
+    const isAdminPage = req.nextUrl.pathname.startsWith("/dashboard/admin");
     if (isTeacherPage && token?.role !== "teacher") {
       return NextResponse.redirect(new URL("/dashboard/student", req.url));
     }
@@ -15,7 +15,11 @@ export default withAuth(
     if (isStudentPage && token?.role !== "student") {
       return NextResponse.redirect(new URL("/dashboard/teacher", req.url));
     }
+    if(isAdminPage && token?.role !== "admin"){
+      return NextResponse.redirect(new URL("/dashboard/admin", req.url));
+    }
   },
+
   {
     callbacks: {
       authorized: ({ token }) => !!token,

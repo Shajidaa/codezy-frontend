@@ -13,7 +13,7 @@ import {
 
 // --- Components ---
 
-const StatCard = ({ title, value, icon: Icon, trend }: any) => (
+const StatCard = ({ title, value, icon: Icon, trend }: { title: string; value: string; icon: React.ComponentType<{ size?: number }>; trend?: string }) => (
   <div className="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm">
     <div className="flex justify-between items-start mb-4">
       <div className="p-3 bg-brand-gold/10 rounded-2xl text-brand-gold">
@@ -30,7 +30,7 @@ const StatCard = ({ title, value, icon: Icon, trend }: any) => (
   </div>
 );
 
-const CourseRow = ({ name, students, status }: any) => (
+const CourseRow = ({ name, students, status }: { name: string; students: number; status: string }) => (
   <div className="flex items-center justify-between p-4 hover:bg-gray-50 rounded-2xl transition-all group">
     <div className="flex items-center gap-4">
       <div className="w-12 h-12 bg-brand-dark rounded-xl flex items-center justify-center text-white font-bold">
@@ -91,10 +91,10 @@ export default function TeacherDashboard() {
           </div>
           
           <div className="space-y-2">
-            <CourseRow name="MERN Stack Masterclass" students="450" status="Active" />
-            <CourseRow name="Advanced Next.js Architecture" students="210" status="Active" />
-            <CourseRow name="UI/UX for Developers" students="125" status="Draft" />
-            <CourseRow name="Docker & Kubernetes" students="89" status="Active" />
+            <CourseRow name="MERN Stack Masterclass" students={450} status="Active" />
+            <CourseRow name="Advanced Next.js Architecture" students={210} status="Active" />
+            <CourseRow name="UI/UX for Developers" students={125} status="Draft" />
+            <CourseRow name="Docker & Kubernetes" students={89} status="Active" />
           </div>
         </div>
 
@@ -106,7 +106,7 @@ export default function TeacherDashboard() {
           <div className="space-y-6 relative z-10">
             <div className="p-4 bg-white/5 rounded-2xl border border-white/10">
               <p className="text-xs text-brand-gold font-black uppercase mb-1">Notice</p>
-              <p className="text-sm text-gray-300 leading-relaxed">Your "MERN Stack" course has 12 new pending assignments to grade.</p>
+              <p className="text-sm text-gray-300 leading-relaxed">Your &rdquo;MERN Stack&rdquo; course has 12 new pending assignments to grade.</p>
             </div>
             
             <div className="p-4 bg-white/5 rounded-2xl border border-white/10">
