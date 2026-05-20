@@ -1,4 +1,4 @@
-// app/page.tsx
+
 "use client";
 
 import { useState } from "react";
@@ -12,7 +12,7 @@ import { PlanRoadmap } from "./plan-roadmap";
 
 
 
-// Atomic Sub-components
+
 
 
 export default function Home() {

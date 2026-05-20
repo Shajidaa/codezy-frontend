@@ -53,11 +53,11 @@ export default function ProfessionalBookingForm() {
           <motion.div 
             initial={{ opacity: 0, y: 20 }} 
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-100"
+            className=" rounded-3xl shadow-2xl overflow-hidden bg-[#393536] border-t-8 border-[#EEB30D]"
           >
             <div>
               <Link href="/" className="text-sm
-               flex items-end font-black tracking-tighter text-brand-dark ml-3 mb-8">
+               flex items-end font-black tracking-tighter text-white ml-3 mb-8">
                  Back 
               </Link>
               <div className="grid grid-cols-1 md:grid-cols-3">
