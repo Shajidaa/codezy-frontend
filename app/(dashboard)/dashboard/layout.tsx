@@ -28,15 +28,16 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     admin: [
       { name: 'Admin Panel', href: '/dashboard/admin', icon: Settings },
       {name:"Students", href:"/dashboard/admin/students", icon: Users},
+      {name:"Enrollment Students", href:"/dashboard/admin/paidStudent", icon: BookOpen},
       { name: 'User Management', href: '/dashboard/admin/users', icon: Users },
-
+      { name: 'Course Management', href: '/dashboard/admin/courses', icon: BookOpen },
     ],
   };
 
   const currentLinks = navItems[userRole as keyof typeof navItems];
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="min-h-screen bg-[var(--color-brand-dark)]/50 flex">
       {/* --- Mobile Sidebar Overlay --- */}
      
         {/* {isSidebarOpen && (
