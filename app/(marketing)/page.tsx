@@ -2,11 +2,12 @@
 
 import HeroSection from './components/home/HeroSection';
 import Text from './components/home/Text';
-import CourseSection from './components/home/courseSection';
+
 import FeaturesSection from './components/home/FeaturesSection';
 import HeroFuture from './components/home/HeroFuture';
 import CourseLaunch from './components/home/CourseLaunch';
 import BenefitsSection from './components/home/BenefitsSection';
+import CourseSectionHome from './components/home/CourseSectionHome';
 
 export default function HomePage() {
   return (
@@ -15,7 +16,7 @@ export default function HomePage() {
       <HeroSection/>
      <Text/>
      <CourseLaunch/>
-<CourseSection/>
+<CourseSectionHome/>
 <HeroFuture/>
 
 <BenefitsSection />

@@ -173,18 +173,7 @@ const CourseSection: React.FC = () => {
         </div>
 
         <div className="max-w-7xl mx-auto relative z-10">
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#EEB30D]/10 text-[#EEB30D] text-sm font-medium mb-4">
-              <Sparkles size={16} />
-              <span>250+ hours of content</span>
-            </div>
-            <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-[#393536] to-[#949293] dark:from-[#FFFFFF] dark:to-[#949293] bg-clip-text text-transparent mb-4">
-              Explore free interactive coding lessons
-            </h1>
-            <p className="text-lg text-[#949293] max-w-2xl mx-auto">
-              Learn to code with fun, interactive courses handcrafted by industry experts.
-            </p>
-          </div>
+         
 
           {/* Search and filters */}
           <div className="flex flex-col md:flex-row gap-4 mb-12">

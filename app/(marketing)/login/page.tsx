@@ -57,7 +57,8 @@ const handleSubmit = async (e: React.FormEvent) => {
 };
 
   return (
-    <div className="min-h-screen bg-[#FDFDFD] flex items-center justify-center p-4 font-sans selection:bg-brand-gold/30">
+    <div className="min-h-screen
+     bg-brand-dark flex items-center justify-center p-4 font-sans selection:bg-brand-gold/30">
       {/* Decorative Background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-[20%] right-[10%] w-[30%] h-[30%] bg-brand-gold/5 rounded-full blur-[120px]" />
@@ -67,7 +68,8 @@ const handleSubmit = async (e: React.FormEvent) => {
       <motion.div 
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="w-full max-w-120 bg-white rounded-[2.5rem] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.08)] border border-brand-gray/10 p-8 md:p-12 relative z-10"
+        className="w-full max-w-120
+        bg-white  rounded-[2.5rem] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.08)] border border-brand-gray/10 p-8 md:p-12 relative z-10"
       >
         <div className="text-center mb-10">
           <motion.div 
