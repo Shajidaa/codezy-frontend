@@ -12,7 +12,7 @@ export default function StudentDashboard() {
         <StatCard title="Certificates" value="3" />
       </div>
 
-      {/* Course List Component এখানে আসবে */}
+      {/* Course List Component  */}
     </div>
   );
 }

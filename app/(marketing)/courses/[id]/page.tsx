@@ -82,7 +82,7 @@ const CourseDetailPage = () => {
     <div className="min-h-screen bg-[#FFFFFF] dark:bg-[#393536] text-[#393536] dark:text-[#FFFFFF] pb-16">
       {/* Header Banner Segment */}
       <div className="relative bg-gradient-to-br from-[#393536] to-[#1e1b1c] py-12 md:py-20 px-4 text-white">
-        <div className="max-w-5xl mx-auto relative z-10">
+        <div className="max-w-7xl mx-auto relative z-10">
           <button 
             onClick={() => router.push('/')}
             className="inline-flex items-center gap-2 text-sm text-[#949293] hover:text-[#EEB30D] transition-colors mb-6 group"
@@ -133,7 +133,7 @@ const CourseDetailPage = () => {
       </div>
 
       {/* Main Content Layout Block */}
-      <div className="max-w-5xl mx-auto px-4 mt-12">
+      <div className="max-w-7xl mx-auto px-4 mt-12">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           
           {/* Left Column: Visual overview details */}
