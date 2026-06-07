@@ -1,25 +1,47 @@
-
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Currency } from "@/app/types";
-import { levelsData } from "@/data/levels-config";
+import { Currency, LevelData } from "@/app/types";
 import { LevelTabs } from "./level-tabs";
 import { HeroVisuals } from "./HeroVisuals";
 import { PricingCard } from "./pricing-card";
 import { PlanRoadmap } from "./plan-roadmap";
 
-
-
-
-
-
 export default function Home() {
+  const [levelsData, setLevelsData] = useState<LevelData[]>([]);
   const [activeTab, setActiveTab] = useState<string>("level-1");
   const [currency, setCurrency] = useState<Currency>("BDT");
+  const [loading, setLoading] = useState<boolean>(true);
 
-  const activeData = levelsData.find((l) => l.id === activeTab)!;
+  useEffect(() => {
+    const fetchLevels = async () => {
+      try {
+        // Update URL to production API endpoint when deploying
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/bootcamp-levels`);
+        if (res.ok) {
+          const data = await res.json();
+          setLevelsData(data);
+        }
+      } catch (err) {
+        console.error("Failed to fetch bootcamp levels:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchLevels();
+  }, []);
+
+  const activeData = levelsData.find((l) => l.id === activeTab);
+
+  if (loading || !activeData) {
+    return (
+      <div className="bg-[#0f0e0e] min-h-screen flex items-center justify-center text-[#f4f2f0]">
+        <p className="text-lg tracking-wider animate-pulse">Loading Bootcamps...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-brand-dark">
