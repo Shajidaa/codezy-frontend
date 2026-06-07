@@ -17,7 +17,7 @@ export default function Home() {
   useEffect(() => {
     const fetchLevels = async () => {
       try {
-        // Update URL to production API endpoint when deploying
+
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/bootcamp-levels`);
         if (res.ok) {
           const data = await res.json();
@@ -37,8 +37,8 @@ export default function Home() {
 
   if (loading || !activeData) {
     return (
-      <div className="bg-[#0f0e0e] min-h-screen flex items-center justify-center text-[#f4f2f0]">
-        <p className="text-lg tracking-wider animate-pulse">Loading Bootcamps...</p>
+      <div className="bg-brand-dark min-h-screen flex items-center justify-center text-[#f4f2f0]">
+        <p className="text-lg tracking-wider animate-pulse">Loading ...</p>
       </div>
     );
   }

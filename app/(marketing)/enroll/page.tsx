@@ -1,11 +1,11 @@
 "use client";
 
-import React, { use, useState, useTransition } from "react";
+import React, { use, useEffect, useState, useTransition } from "react";
 import Link from "next/link";
 import { ArrowLeft, ShieldCheck, RefreshCw, Loader2, Calendar } from "lucide-react";
 
-import { Currency } from "@/app/types";
-import { levelsData } from "@/data/levels-config";
+import { Currency, LevelData } from "@/app/types";
+
 
 interface PageProps {
   searchParams: Promise<{ plan?: string; currency?: string }>;
@@ -17,8 +17,26 @@ export default function EnrollPage({ searchParams }: PageProps) {
   const resolvedParams = use(searchParams);
   
   const selectedPlanId = resolvedParams.plan || "level-1"; 
+    const [levelsData, setLevelsData] = useState<LevelData[]>([]);
   const currentCurrency = (resolvedParams.currency?.toUpperCase() === "BDT" ? "BDT" : "USD") as Currency;
-  
+   useEffect(() => {
+     const fetchLevels = async () => {
+       try {
+ 
+         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/bootcamp-levels`);
+         if (res.ok) {
+           const data = await res.json();
+            setLevelsData(data);
+         }
+       } catch (err) {
+         console.error("Failed to fetch bootcamp levels:", err);
+       } finally {
+       
+       }
+     };
+ 
+     fetchLevels();
+   }, []);
   const planData = levelsData.find((level) => level.id === selectedPlanId) || levelsData[0];
 
   // Form & Payment States
