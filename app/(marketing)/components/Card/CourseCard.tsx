@@ -83,8 +83,7 @@ const bookingPath = session
             </div>
           </div>
           <p className="text-[#949293] text-sm mb-4 line-clamp-2">{course.description}</p>
-          <div className="flex items-center justify-between pt-3 border-t border-[#949293]/10">
-          
+        
             
            
             {/* Action Links */}
@@ -104,7 +103,7 @@ const bookingPath = session
             </Link>
           </div>
           </div>
-        </div>
+
       </div>
     </Link>
   );
