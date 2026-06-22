@@ -1,4 +1,4 @@
-// app/bootcamps/components/plan-roadmap.tsx
+
 "use client";
 
 import { motion } from "framer-motion";

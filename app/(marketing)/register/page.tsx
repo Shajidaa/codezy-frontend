@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useState, Suspense } from 'react'; // Added Suspense here
+import { useRouter, useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { GraduationCap, Presentation, ArrowRight, Sparkles, Loader2, Eye, EyeOff, Mail, Lock, User, Briefcase } from 'lucide-react';
 import { signIn } from 'next-auth/react';
@@ -14,7 +14,6 @@ type UserRole = 'student' | 'teacher';
 // --- Sub-components ---
 const BrandSection = () => (
   <div className="w-full lg:w-[42%] bg-[#393536] p-10 md:p-14 text-white flex flex-col justify-between relative overflow-hidden min-h-[300px] lg:min-h-auto">
-    {/* Decorative background design grids */}
     <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(#949293 0.5px, transparent 0.5px)', backgroundSize: '24px 24px' }} />
     <div className="absolute -right-20 -top-20 w-64 h-64 bg-[#EEB30D]/10 rounded-full blur-3xl pointer-events-none" />
     <div className="absolute -left-20 -bottom-20 w-64 h-64 bg-white/5 rounded-full blur-2xl pointer-events-none" />
@@ -42,8 +41,10 @@ const BrandSection = () => (
   </div>
 );
 
-export default function RegisterPage() {
+// 1. Move all registration form logic to a sub-component that safely consumes the search parameters
+function RegisterForm() {
   const router = useRouter();
+  const searchParams = useSearchParams(); 
   const [isLoading, setIsLoading] = useState(false);
   const [role, setRole] = useState<UserRole>('student');
   const [showPassword, setShowPassword] = useState(false);
@@ -52,9 +53,7 @@ export default function RegisterPage() {
     email: '',
     school: '',
     age: '',
-
     password: '',
-
     expertise: 'Full Stack (MERN)'
   });
 
@@ -67,7 +66,6 @@ export default function RegisterPage() {
     setIsLoading(true);
 
     try {
-      // 1. Backend Registration
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -77,7 +75,6 @@ export default function RegisterPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Registration failed");
 
-      // 2. NextAuth Sign In
       const result = await signIn("credentials", {
         email: formData.email,
         password: formData.password,
@@ -87,12 +84,18 @@ export default function RegisterPage() {
       if (result?.ok) {
         toast.success(`Welcome, ${formData.name}!`);
         
-        // 3. Role-Based Redirection Logic
-        if (role === 'teacher') {
-          router.push("/dashboard/teacher");
+        const callbackUrl = searchParams.get("callbackUrl");
+        
+        if (callbackUrl) {
+          router.push(callbackUrl);
         } else {
-          router.push("/dashboard/student");
+          if (role === 'teacher') {
+            router.push("/dashboard/teacher");
+          } else {
+            router.push("/dashboard/student");
+          }
         }
+        
       } else {
         throw new Error("Automatic login failed. Please sign in manually.");
       }
@@ -104,158 +107,161 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="relative min-h-screen bg-[#FDFDFD] 
-    dark:bg-[#1e1b1c] flex items-center justify-center 
-    p-4 md:pb-28 md:pt-28   font-sans transition-colors duration-300">
-      {/* Bottom curve SVG */}
-        <div className="absolute bottom-0 left-0 
-        w-full overflow-hidden leading-[0]">
-          <svg className="relative block w-full h-[150px] md:h-[80px]" xmlns="http://www.w3.org/2000/svg" 
-          viewBox="0 0 1200 120" 
-          preserveAspectRatio="none">
-            <path d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z" className="fill-[#EEB30D] opacity-20"></path>
-          </svg>
-        </div>
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-6xl bg-white dark:bg-[#2d292a] rounded-[2.5rem] shadow-2xl border border-[#949293]/10 overflow-hidden flex flex-col lg:flex-row relative z-10"
-      >
-        <BrandSection />
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="w-full max-w-6xl bg-white dark:bg-[#2d292a] rounded-[2.5rem] shadow-2xl border border-[#949293]/10 overflow-hidden flex flex-col lg:flex-row relative z-10"
+    >
+      <BrandSection />
 
-        <div className="w-full lg:w-[58%] p-8 md:p-16 bg-white dark:bg-[#2d292a] flex items-center">
-          <div className="max-w-md w-full mx-auto">
-            <header className="mb-8">
-              <h1 className="text-3xl font-black text-[#393536] dark:text-white tracking-tight">
-                Create Account
-              </h1>
-              <p className="text-[#949293] font-semibold mt-1">
-                Start your journey today.
-              </p>
-            </header>
+      <div className="w-full lg:w-[58%] p-8 md:p-16 bg-white dark:bg-[#2d292a] flex items-center">
+        <div className="max-w-md w-full mx-auto">
+          <header className="mb-8">
+            <h1 className="text-3xl font-black text-[#393536] dark:text-white tracking-tight">
+              Create Account
+            </h1>
+            <p className="text-[#949293] font-semibold mt-1">
+              Start your journey today.
+            </p>
+          </header>
 
-            {/* Role Switcher */}
-            <div className="flex p-1.5 bg-[#393536]/5 dark:bg-white/5 rounded-2xl mb-8 relative border border-[#949293]/10">
-              <motion.div 
-                layoutId="activeTab"
-                className="absolute inset-1.5 w-[calc(50%-6px)] bg-white dark:bg-[#393536] rounded-xl shadow-md"
-                transition={{ type: "spring", bounce: 0.15, duration: 0.5 }}
-                style={{ left: role === 'student' ? '6px' : 'calc(50%)' }}
+          <div className="flex p-1.5 bg-[#393536]/5 dark:bg-white/5 rounded-2xl mb-8 relative border border-[#949293]/10">
+            <motion.div 
+              layoutId="activeTab"
+              className="absolute inset-1.5 w-[calc(50%-6px)] bg-white dark:bg-[#393536] rounded-xl shadow-md"
+              transition={{ type: "spring", bounce: 0.15, duration: 0.5 }}
+              style={{ left: role === 'student' ? '6px' : 'calc(50%)' }}
+            />
+            <RoleButton active={role === 'student'} onClick={() => setRole('student')} icon={<GraduationCap size={18}/>} label="Student" />
+            <RoleButton active={role === 'teacher'} onClick={() => setRole('teacher')} icon={<Presentation size={18}/>} label="Teacher" />
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div className="space-y-4">
+              <FloatingInput 
+                label="Full Name" 
+                type="text" 
+                value={formData.name} 
+                onChange={(v: string) => handleInputChange('name', v)} 
+                placeholder="Shajida Akter" 
+                icon={<User size={18} />}
               />
-              <RoleButton active={role === 'student'} onClick={() => setRole('student')} icon={<GraduationCap size={18}/>} label="Student" />
-              <RoleButton active={role === 'teacher'} onClick={() => setRole('teacher')} icon={<Presentation size={18}/>} label="Teacher" />
+              
+              <FloatingInput 
+                label="Email Address" 
+                type="email" 
+                value={formData.email} 
+                onChange={(v: string) => handleInputChange('email', v)} 
+                placeholder="name@example.com" 
+                icon={<Mail size={18} />}
+              />
+              <FloatingInput 
+                label="Age" 
+                type="number" 
+                value={formData.age} 
+                onChange={(v: string) => handleInputChange('age', v)} 
+                placeholder="18"
+                icon={<User size={18} />}
+              />
+              <FloatingInput 
+                label="School" 
+                type="text" 
+                value={formData.school} 
+                onChange={(v: string) => handleInputChange('school', v)} 
+                placeholder="Your School" 
+                icon={<GraduationCap size={18} />}
+              />
+              
+              <FloatingInput 
+                label="Password" 
+                type={showPassword ? "text" : "password"} 
+                value={formData.password} 
+                onChange={(v: string) => handleInputChange('password', v)} 
+                placeholder="••••••••" 
+                icon={<Lock size={18} />}
+                isPassword
+                showPassword={showPassword}
+                onTogglePassword={() => setShowPassword(!showPassword)}
+              />
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-5">
-              <div className="space-y-4">
-                <FloatingInput 
-                  label="Full Name" 
-                  type="text" 
-                  value={formData.name} 
-                  onChange={(v: string) => handleInputChange('name', v)} 
-                  placeholder="Shajida Akter" 
-                  icon={<User size={18} />}
-                />
-                
-                <FloatingInput 
-                  label="Email Address" 
-                  type="email" 
-                  value={formData.email} 
-                  onChange={(v: string) => handleInputChange('email', v)} 
-                  placeholder="name@example.com" 
-                  icon={<Mail size={18} />}
-                />
-                <FloatingInput 
-                  label="Age" 
-                  type="number" 
-                  value={formData.age} 
-                  onChange={(v: string) => handleInputChange('age', v)} 
-                  placeholder="18"
-                  
-                  icon={<User size={18} />}
-                />
-                <FloatingInput 
-                  label="School" 
-                  type="text" 
-                  value={formData.school} 
-                  onChange={(v: string) => handleInputChange('school', v)} 
-                  placeholder="Your School" 
-                  icon={<GraduationCap size={18} />}
-                />
-                
-                <FloatingInput 
-                  label="Password" 
-                  type={showPassword ? "text" : "password"} 
-                  value={formData.password} 
-                  onChange={(v: string) => handleInputChange('password', v)} 
-                  placeholder="••••••••" 
-                  icon={<Lock size={18} />}
-                  isPassword
-                  showPassword={showPassword}
-                  onTogglePassword={() => setShowPassword(!showPassword)}
-                />
-              </div>
+            <AnimatePresence mode="wait">
+              {role === 'teacher' && (
+                <motion.div 
+                  initial={{ height: 0, opacity: 0, y: -10 }} 
+                  animate={{ height: 'auto', opacity: 1, y: 0 }} 
+                  exit={{ height: 0, opacity: 0, y: -10 }} 
+                  className="overflow-hidden"
+                >
+                  <label className="text-[11px] font-black uppercase tracking-widest text-[#949293] mb-2 block px-1">
+                    Expertise Field
+                  </label>
+                  <div className="relative flex items-center">
+                    <span className="absolute left-5 text-[#949293]"><Briefcase size={18} /></span>
+                    <select 
+                      value={formData.expertise} 
+                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleInputChange('expertise', e.target.value)}
+                      className="w-full pl-12 pr-5 py-4 bg-[#393536]/5 dark:bg-white/5 border-2 border-transparent rounded-2xl outline-none text-sm font-semibold text-[#393536] dark:text-white focus:border-[#EEB30D]/20 focus:bg-white dark:focus:bg-[#393536] transition-all appearance-none cursor-pointer"
+                    >
+                      <option value="Full Stack (MERN)">Full Stack (MERN)</option>
+                      <option value="Next.js & Cloud">Next.js & Cloud</option>
+                      <option value="UI/UX Engineering">UI/UX Engineering</option>
+                    </select>
+                    <span className="absolute right-5 text-[#949293] pointer-events-none text-xs">▼</span>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
-              {/* Dynamic Expertise Selector Block */}
-              <AnimatePresence mode="wait">
-                {role === 'teacher' && (
-                  <motion.div 
-                    initial={{ height: 0, opacity: 0, y: -10 }} 
-                    animate={{ height: 'auto', opacity: 1, y: 0 }} 
-                    exit={{ height: 0, opacity: 0, y: -10 }} 
-                    className="overflow-hidden"
-                  >
-                    <label className="text-[11px] font-black uppercase tracking-widest text-[#949293] mb-2 block px-1">
-                      Expertise Field
-                    </label>
-                    <div className="relative flex items-center">
-                      <span className="absolute left-5 text-[#949293]"><Briefcase size={18} /></span>
-                      <select 
-                        value={formData.expertise} 
-                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleInputChange('expertise', e.target.value)}
-                        className="w-full pl-12 pr-5 py-4 bg-[#393536]/5 dark:bg-white/5 border-2 border-transparent rounded-2xl outline-none text-sm font-semibold text-[#393536] dark:text-white focus:border-[#EEB30D]/20 focus:bg-white dark:focus:bg-[#393536] transition-all appearance-none cursor-pointer"
-                      >
-                        <option value="Full Stack (MERN)">Full Stack (MERN)</option>
-                        <option value="Next.js & Cloud">Next.js & Cloud</option>
-                        <option value="UI/UX Engineering">UI/UX Engineering</option>
-                      </select>
-                      <span className="absolute right-5 text-[#949293] pointer-events-none text-xs">▼</span>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-
-              <motion.button 
-                disabled={isLoading}
-                whileHover={{ scale: 1.005 }}
-                whileTap={{ scale: 0.995 }}
-                className="w-full bg-[#EEB30D] text-[#393536] font-black py-4.5 rounded-2xl shadow-lg shadow-[#EEB30D]/10 hover:bg-opacity-90 transition-all flex items-center justify-center gap-3 disabled:opacity-50 min-h-[56px] text-sm uppercase tracking-wider mt-2"
-              >
-                {isLoading ? (
-                  <Loader2 className="animate-spin text-[#393536]" size={20} />
-                ) : (
-                  <>Get Started <ArrowRight size={18} strokeWidth={2.5} /></>
-                )}
-              </motion.button>
-              <div className="text-center mt-4">
-                <p className="text-sm text-[#949293] font-medium">
-                  Do you have an account?{' '}
-                  <Link href="/login" className="text-[#EEB30D] hover:underline font-bold">
-                    Login here
-                  </Link>
-                </p>
-              </div>
-            </form>
-          </div>
-          
+            <motion.button 
+              disabled={isLoading}
+              whileHover={{ scale: 1.005 }}
+              whileTap={{ scale: 0.995 }}
+              className="w-full bg-[#EEB30D] text-[#393536] font-black py-4.5 rounded-2xl shadow-lg shadow-[#EEB30D]/10 hover:bg-opacity-90 transition-all flex items-center justify-center gap-3 disabled:opacity-50 min-h-[56px] text-sm uppercase tracking-wider mt-2"
+            >
+              {isLoading ? (
+                <Loader2 className="animate-spin text-[#393536]" size={20} />
+              ) : (
+                <>Get Started <ArrowRight size={18} strokeWidth={2.5} /></>
+              )}
+            </motion.button>
+            <div className="text-center mt-4">
+              <p className="text-sm text-[#949293] font-medium">
+                Do you have an account?{' '}
+                <Link href="/login" className="text-[#EEB30D] hover:underline font-bold">
+                  Login here
+                </Link>
+              </p>
+            </div>
+          </form>
         </div>
-        
-      </motion.div>
-     
+      </div>
+    </motion.div>
+  );
+}
+
+// 2. The Main Page export wraps everything perfectly inside a dynamic Suspense boundary for Next production building
+export default function RegisterPage() {
+  return (
+    <div className="relative min-h-screen bg-[#FDFDFD] dark:bg-[#1e1b1c] flex items-center justify-center p-4 md:pb-28 md:pt-28 font-sans transition-colors duration-300">
+      <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0]">
+        <svg className="relative block w-full h-[150px] md:h-[80px]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+          <path d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z" className="fill-[#EEB30D] opacity-20"></path>
+        </svg>
+      </div>
+
+      <Suspense fallback={
+        <div className="flex items-center justify-center min-h-[400px]">
+          <Loader2 className="animate-spin text-[#EEB30D]" size={40} />
+        </div>
+      }>
+        <RegisterForm />
+      </Suspense>
     </div>
   );
 }
 
+// --- Helpers remain exactly the same ---
 function RoleButton({ active, onClick, icon, label }: { active: boolean; onClick: () => void; icon: React.ReactNode; label: string }) {
   return (
     <button 
@@ -283,17 +289,7 @@ interface FloatingInputProps {
   onTogglePassword?: () => void;
 }
 
-function FloatingInput({ 
-  label, 
-  type, 
-  placeholder, 
-  value, 
-  onChange, 
-  icon, 
-  isPassword = false, 
-  showPassword = false, 
-  onTogglePassword 
-}: FloatingInputProps) {
+function FloatingInput({ label, type, placeholder, value, onChange, icon, isPassword = false, showPassword = false, onTogglePassword }: FloatingInputProps) {
   return (
     <div className="group space-y-1.5">
       <label className="text-[11px] font-black uppercase tracking-widest text-[#949293] block px-1 group-focus-within:text-[#EEB30D] transition-colors duration-200">
@@ -311,8 +307,6 @@ function FloatingInput({
           placeholder={placeholder}
           className="w-full pl-12 pr-12 py-4 bg-[#393536]/5 dark:bg-white/5 border-2 border-transparent rounded-2xl focus:bg-white dark:focus:bg-[#393536] focus:border-[#EEB30D]/30 outline-none text-sm font-medium transition-all text-[#393536] dark:text-white placeholder-[#949293]/60"
         />
-        
-        {/* Eye/EyeOff Icon Trigger */}
         {isPassword && onTogglePassword && (
           <button
             type="button"

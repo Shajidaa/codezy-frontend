@@ -1,6 +1,8 @@
+
 import { Course } from "@/app/types/course";
-import  { Search, Code, Layout, Palette, Braces, Database, Sparkles,
-     TrendingUp, Users, Clock, BookOpen, Star, AlertCircle } from "lucide-react";
+import  {  Code, Layout, Palette, Braces, Database, Sparkles,
+     TrendingUp, Users, Clock, BookOpen, Star, } from "lucide-react";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -26,12 +28,17 @@ const IconMap: Record<string, React.ReactNode> = {
   book: <BookOpen size={18} />,
   trending: <TrendingUp size={18} />
 };
+
 const CourseCard: React.FC<{ course: Course }> = ({ course }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
-  
+    const { data: session } = useSession();
   // Use MongoDB _id if available, otherwise fall back to standard id
   const courseId = course._id || course.id;
-
+  const targetBookingUrl = `/booking?courseId=${courseId}`;
+  
+const bookingPath = session 
+    ? targetBookingUrl 
+    : `/register?callbackUrl=${encodeURIComponent(targetBookingUrl)}`;
   return (
     
     <Link href={`/courses/${courseId}`} className="block group">
@@ -79,18 +86,23 @@ const CourseCard: React.FC<{ course: Course }> = ({ course }) => {
           <div className="flex items-center justify-between pt-3 border-t border-[#949293]/10">
           
             
-            <div className="text-sm font-medium text-[#EEB30D] hover:text-[#EEB30D]/80 transition-colors flex items-center gap-1 group-hover:gap-2">
+           
+            {/* Action Links */}
+          <div className="flex items-center justify-between pt-3 border-t border-[#949293]/10 mt-auto">
+            <Link href={`/courses/${courseId}`} className="text-sm font-medium text-[#EEB30D] hover:text-[#EEB30D]/80 transition-colors flex items-center gap-1 group-hover:gap-2">
               View Course
               <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
-            </div>
-            <Link href={'/booking'} className="text-sm font-medium text-[#EEB30D] hover:text-[#EEB30D]/80 transition-colors flex items-center gap-1 group-hover:gap-2">
-             Free Booking
+            </Link>
+           
+            <Link href={bookingPath} className="text-sm font-medium text-[#EEB30D] hover:text-[#EEB30D]/80 transition-colors flex items-center gap-1 group-hover:gap-2">
+              Free Booking
               <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </Link>
+          </div>
           </div>
         </div>
       </div>
