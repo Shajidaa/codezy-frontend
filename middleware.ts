@@ -15,7 +15,7 @@ export default withAuth(
     if (isStudentPage && token?.role !== "student") {
       return NextResponse.redirect(new URL("/dashboard/teacher", req.url));
     }
-    if(isAdminPage && token?.role !== "admin"){
+    if (isAdminPage && token?.role !== "admin") {
       return NextResponse.redirect(new URL("/dashboard/admin", req.url));
     }
   },
@@ -24,7 +24,7 @@ export default withAuth(
     callbacks: {
       authorized: ({ token }) => !!token,
     },
-  }
+  },
 );
 
-export const config = { matcher: ["/dashboard/:path*"] };
+export const config = { matcher: ["/dashboard/:path*", "/booking/:path*"] };

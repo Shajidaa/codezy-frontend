@@ -1,14 +1,17 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "react-toastify";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
-// প্রোফেশনাল টাইম স্লট জেনারেটর
+
+
 const TIME_SLOTS = ["10:00 AM", "11:00 AM", "02:00 PM", "04:00 PM", "07:00 PM", "09:00 PM"];
 
 export default function ProfessionalBookingForm() {
+
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   
@@ -16,7 +19,14 @@ export default function ProfessionalBookingForm() {
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
 
+const { data: session, status } = useSession();
+  const router = useRouter();
 
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.push("/login?callbackUrl=/booking");
+    }
+  }, [status, router]);
   const today = new Date().toISOString().split("T")[0];
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
