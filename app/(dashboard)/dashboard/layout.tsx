@@ -14,7 +14,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   const userRole = session?.user?.role || 'student';
 
- console.log(session);
+//  console.log(session);
  
   const navItems = {
     student: [

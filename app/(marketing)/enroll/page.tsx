@@ -95,7 +95,7 @@ export default function EnrollPage({ searchParams }: PageProps) {
           throw new Error(data.error || "পেমেন্ট সাবমিট করতে সমস্যা হয়েছে।");
         }
 
-        console.log("Enrollment success:", data);
+        // console.log("Enrollment success:", data);
         setIsSuccess(true);
       } catch (error: any) {
         console.error("Payment Submission Error:", error);
