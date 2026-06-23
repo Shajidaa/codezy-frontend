@@ -21,11 +21,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       { name: 'My Courses', href: '/dashboard/student', icon: BookOpen },
       { name: 'Progress', href: '/dashboard/student/progress', icon: LayoutDashboard },
       { name: 'Find Tutors', href: '/dashboard/student/findTutor', icon: LayoutDashboard },
-      { name: 'Profile', href: '/dashboard/student/profile', icon: LayoutDashboard },
+      
     ],
     teacher: [
       { name: 'Overview', href: '/dashboard/teacher', icon: LayoutDashboard },
       { name: 'My Classes', href: '/dashboard/teacher/classes', icon: Users },
+      { name: 'Profile', href: '/dashboard/teacher/profile', icon: Users },
     ],
     admin: [
       { name: 'Admin Panel', href: '/dashboard/admin', icon: Settings },
