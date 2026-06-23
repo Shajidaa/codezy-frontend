@@ -20,6 +20,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     student: [
       { name: 'My Courses', href: '/dashboard/student', icon: BookOpen },
       { name: 'Progress', href: '/dashboard/student/progress', icon: LayoutDashboard },
+      { name: 'Find Tutors', href: '/dashboard/student/findTutor', icon: LayoutDashboard },
+      { name: 'Profile', href: '/dashboard/student/profile', icon: LayoutDashboard },
     ],
     teacher: [
       { name: 'Overview', href: '/dashboard/teacher', icon: LayoutDashboard },
@@ -37,7 +39,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const currentLinks = navItems[userRole as keyof typeof navItems];
 
   return (
-    <div className="min-h-screen bg-[var(--color-brand-dark)]/50 flex">
+    <div className="min-h-screen bg-white flex">
       {/* --- Mobile Sidebar Overlay --- */}
      
         {/* {isSidebarOpen && (

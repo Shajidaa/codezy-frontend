@@ -7,50 +7,84 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { InlineWidget } from "react-calendly";
-import { HiArrowRight, HiCheckCircle, HiClock, HiPhone } from "react-icons/hi";
+import { HiArrowRight, HiCheckCircle, HiClock, HiLockClosed } from "react-icons/hi";
 
 export default function ProfessionalBookingForm() {
-  // const [loading, setLoading] = useState(false);
-  // Track step: 1 = Details Form, 2 = Calendly Booking
   const [currentStep, setCurrentStep] = useState(1);
+  const [hasActiveBooking, setHasActiveBooking] = useState(false);
+  const [checkingBooking, setCheckingBooking] = useState(true);
 
   const { data: session, status } = useSession();
   const router = useRouter();
 
+  // ১. অথেন্টিকেশন চেক
   useEffect(() => {
     if (status === "unauthenticated") {
       router.push("/register?callbackUrl=/booking");
     }
   }, [status, router]);
 
-  // const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-  //   setLoading(true);
+  // ২. বুকিং স্ট্যাটাস চেক (ইউজার আগে বুক করেছে কিনা এবং ক্লাস শেষ হয়েছে কিনা)
+  useEffect(() => {
+    const checkUserBooking = async () => {
+      if (status !== "authenticated" || !session?.user?.email) return;
 
-  //   const formData = new FormData(e.currentTarget);
-  //   const payload = Object.fromEntries(formData.entries());
+      try {
+        // আপনার ব্যাকএন্ড এপিআই এন্ডপয়েন্ট এখানে বসাবেন
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/bookings/check-status?email=${session.user.email}`
+        );
+        const data = await response.json();
 
-  //   try {
-  //     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/leads/demo`, {
-  //       method: "POST",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify(payload),
-  //     });
+        // যদি ব্যাকএন্ড থেকে রিটার্ন করে যে একটিভ ক্লাস আছে
+        if (data.hasActiveBooking) {
+          setHasActiveBooking(true);
+        }
+      } catch (error) {
+        console.error("Booking status check failed:", error);
+      } finally {
+        setCheckingBooking(false);
+      }
+    };
 
-  //     if (response.ok) {
-  //       toast.success("Details saved! Now pick your slot.");
-  //       setCurrentStep(2); // Move to Calendly booking
-  //     } else {
-  //       toast.error("Something went wrong. Please try again.");
-  //     }
-  //   } catch (error) {
-  //     console.error("Submission failed", error);
-  //     toast.error("Submission failed. Please check your connection.");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+    checkUserBooking();
+  }, [status, session]);
 
+  // লোডিং স্টেট দেখানোর জন্য
+  if (status === "loading" || checkingBooking) {
+    return (
+      <div className="flex justify-center items-center min-h-[50vh] text-white">
+        <p className="animate-pulse font-medium">Loading details, please wait...</p>
+      </div>
+    );
+  }
+
+  // ৩. যদি অলরেডি বুকিং থাকে এবং ক্লাস শেষ না হয়, তবে এই ইন্টারফেসটি দেখাবে
+  if (hasActiveBooking) {
+    return (
+      <div className="max-w-xl mx-auto my-12 px-4 font-sans">
+        <div className="rounded-3xl shadow-2xl p-8 bg-[#393536] border-t-8 border-red-500 text-center space-y-6">
+          <div className="inline-flex items-center justify-center bg-red-500/10 p-4 rounded-full text-red-500">
+            <HiLockClosed className="w-12 h-12" />
+          </div>
+          <h2 className="text-2xl font-bold text-white">আপনি ইতিমধ্যে একটি স্লট বুক করেছেন!</h2>
+          <p className="text-slate-300 text-sm leading-relaxed">
+            আপনার বর্তমান ক্লাসটি সম্পূর্ণ শেষ না হওয়া পর্যন্ত একই ইমেইল (<span className="text-[#EEB30D] font-semibold">{session?.user?.email}</span>) দিয়ে নতুন কোনো ক্লাস বা স্লট বুক করা যাবে না।
+          </p>
+          <div className="pt-4">
+            <Link
+              href="/"
+              className="inline-flex items-center justify-center bg-[#EEB30D] text-[#393536] font-bold px-6 py-2.5 rounded-xl hover:bg-yellow-500 transition-all text-sm"
+            >
+              ড্যাশবোর্ডে ফিরে যান
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ৪. মেইন বুকিং ফর্ম (যদি বুকিং না থাকে)
   return (
     <div className="max-w-5xl mx-auto my-12 px-4 font-sans">
       <AnimatePresence mode="wait">
@@ -71,40 +105,37 @@ export default function ProfessionalBookingForm() {
               </Link>
 
               <div className="p-8 space-y-8">
-               
-              <header>
-                <h1 className="text-3xl font-bold text-white tracking-tight leading-tight">
-                  First, please fill out this quick form 📝
-                </h1>
-                <p className="text-sm text-slate-500 mt-2 font-medium">
-                  It helps us understand your child&rsquo;s needs better before booking.
-                </p>
-              </header>
+                <header>
+                  <h1 className="text-3xl font-bold text-white tracking-tight leading-tight">
+                    First, please fill out this quick form 📝
+                  </h1>
+                  <p className="text-sm text-slate-400 mt-2 font-medium">
+                    It helps us understand your child&rsquo;s needs better before booking.
+                  </p>
+                </header>
 
-              <div className="w-full bg-white shadow-sm rounded-3xl overflow-hidden p-4 border border-slate-200">
-                <iframe
-                  src={process.env.NEXT_PUBLIC_GOOGLE_FORM_URL} 
-                  width="100%"
-                  height="600"
-                  className="border-none"
-                  title="Google Form"
-                >
-                  Loading…
-                </iframe>
-              </div>
+                <div className="w-full bg-white shadow-sm rounded-3xl overflow-hidden p-4 border border-slate-200">
+                  <iframe
+                    src={process.env.NEXT_PUBLIC_GOOGLE_FORM_URL}
+                    width="100%"
+                    height="600"
+                    className="border-none"
+                    title="Google Form"
+                  >
+                    Loading…
+                  </iframe>
+                </div>
 
-              {/* অ্যাকশন বাটন */}
-              <div className="flex justify-end">
-                <button 
-                  onClick={() => setCurrentStep(2)}
-                  className="inline-flex items-center gap-2 bg-brand-gold text-white font-bold px-8 py-3 rounded-xl hover:bg-emerald-700 transition-all shadow-md"
-                >
-                  I&rsquo;ve filled the form, Continue to Booking <HiArrowRight className="w-5 h-5" />
-                </button>
+                <div className="flex justify-end">
+                  <button
+                    onClick={() => setCurrentStep(2)}
+                    className="inline-flex items-center gap-2 bg-[#EEB30D] text-gray-900 font-bold px-8 py-3 rounded-xl hover:bg-yellow-500 transition-all shadow-md"
+                  >
+                    I&rsquo;ve filled the form, Continue to Booking <HiArrowRight className="w-5 h-5" />
+                  </button>
+                </div>
               </div>
             </div>
-              </div>
-            
           </motion.div>
         ) : (
           <motion.div
@@ -114,7 +145,6 @@ export default function ProfessionalBookingForm() {
             exit={{ opacity: 0 }}
             className="space-y-6"
           >
-            {/* Header Area */}
             <div className="bg-[#393536] text-white p-6 rounded-3xl shadow-md border-b-4 border-[#EEB30D] flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div>
                 <h2 className="text-xl font-black uppercase text-[#EEB30D]">
@@ -132,7 +162,6 @@ export default function ProfessionalBookingForm() {
               </button>
             </div>
 
-            {/* Calendly Interactive Widget */}
             <div className="bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden">
               <InlineWidget
                 url="https://calendly.com/shajidaislam34/30min"
@@ -147,7 +176,6 @@ export default function ProfessionalBookingForm() {
               />
             </div>
 
-            {/* Additional context & trust parameters */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="bg-slate-100 rounded-2xl p-4 space-y-2">
                 <div className="flex items-center gap-3 text-slate-700 font-bold text-xs">
