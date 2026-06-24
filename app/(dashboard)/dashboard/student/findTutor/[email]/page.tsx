@@ -6,8 +6,9 @@ import { CheckCircle, MapPin, Phone, GraduationCap, Briefcase, BookOpen, Calenda
 import Link from 'next/link';
 import Script from 'next/script';
 import { useSession } from 'next-auth/react';
-import { toast } from 'react-toastify/unstyled';
-
+// সঠিক ইমপোর্ট
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'; 
 
 export default function TutorProfilePage() {
   const { email } = useParams();
@@ -21,7 +22,6 @@ export default function TutorProfilePage() {
       try {
         const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users/email/${email}`);
         setTutor(response.data);
-     
       } catch (error) {
         console.error("Error loading profile", error);
       } finally {
@@ -31,38 +31,37 @@ export default function TutorProfilePage() {
     if (email) fetchTutorProfile();
   }, [email]);
 
-  // Function to trigger the Calendly popup
   const openCalendly = () => {
     // @ts-ignore
     if (window.Calendly) {
       // @ts-ignore
       window.Calendly.initPopupWidget({
-        url: tutor?.profile?.calendlyLink ||  'https://calendly.com/shajidaislam34/30min', 
+        url: tutor?.profile?.calendlyLink || 'https://calendly.com/shajidaislam34/30min', 
       });
     } else {
-      alert("Calendly is still loading. Please try again in a second.");
+      toast.warning("Calendly is still loading. Please try again.");
     }
   };
 
   useEffect(() => {
-    const handleCalendlyEvent = async (e : { data: { event: string; payload: { invitee: { uri: string } } } }) => {
-      // চেক করা হচ্ছে ইভেন্টটি ক্যালেন্ডলি বুকিং কি না
+    const handleCalendlyEvent = async (e: any) => {
       if (e.data.event && e.data.event === "calendly.event_scheduled") {
-    
         const inviteeUri = e.data.payload.invitee.uri;
 
-        // ব্যাকএন্ডে ডাটা পাঠানো
         try {
           await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/bookings/manual`, {
             tutorEmail: tutor.email,
-            studentEmail: session?.user?.email, 
-            studentName: session?.user?.name,     
+            studentEmail: session?.user?.email || "guest@codezy.com", // ব্যাকআপ ইমেইল
+            studentName: session?.user?.name || "Guest Student",     
             inviteeUri: inviteeUri,
             startTime: new Date().toISOString(), 
           });
-          toast.success("Meeting booked successfully!");
+          
+          // সফল হলে টোস্ট দেখাবে
+          toast.success("🚀 Meeting booked successfully!");
         } catch (error) {
           console.error("Error saving booking:", error);
+          toast.error("Failed to save booking data.");
         }
       }
     };
@@ -70,7 +69,6 @@ export default function TutorProfilePage() {
     window.addEventListener("message", handleCalendlyEvent);
     return () => window.removeEventListener("message", handleCalendlyEvent);
   }, [tutor, session]);
-
 
   if (loading) return <div className="p-10 text-[#EEB30D] font-bold">Loading Profile...</div>;
   if (!tutor) return <div className="p-10 text-red-500 font-bold">Tutor not found.</div>;
@@ -85,7 +83,7 @@ export default function TutorProfilePage() {
         <div className="text-center md:text-left">
           <div className="flex items-center justify-center md:justify-start gap-2">
             <h1 className="text-3xl font-bold text-[#393536]">{tutor.name}</h1>
-            {tutor.role === 'tutor' && <CheckCircle className="text-[#EEB30D] w-6 h-6" fill="currentColor" />}
+            {tutor.role === 'teacher' && <CheckCircle className="text-[#EEB30D] w-6 h-6" fill="currentColor" />}
           </div>
           <p className="text-[#EEB30D] font-semibold text-lg">{tutor.profile?.title}</p>
           <div className="flex flex-wrap justify-center md:justify-start gap-4 mt-3 text-[#949293] text-sm">
@@ -93,7 +91,6 @@ export default function TutorProfilePage() {
             <span className="flex items-center gap-1"><Phone className="w-4 h-4" /> {tutor.profile?.phone}</span>
           </div>
           
-          {/* Schedule Button inside the Header/Card */}
           <button 
             onClick={openCalendly}
             className="flex items-center gap-2 px-6 py-3 bg-[#EEB30D] text-[#FFFFFF] font-bold mt-5 rounded-xl hover:bg-[#EEB30D]/90 transition-colors shadow-lg shadow-[#EEB30D]/20"
@@ -143,6 +140,9 @@ export default function TutorProfilePage() {
       {/* Calendly Resources */}
       <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet" />
       <Script src="https://assets.calendly.com/assets/external/widget.js" strategy="lazyOnload" />
+
+      {/* ToastContainer যোগ করা হলো যেন নোটিফিকেশন রেন্ডার হতে পারে */}
+      <ToastContainer position="top-right" autoClose={3000} theme="colored" />
     </div>
   );
 }

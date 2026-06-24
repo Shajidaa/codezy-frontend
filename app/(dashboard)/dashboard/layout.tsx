@@ -25,7 +25,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     ],
     teacher: [
       { name: 'Overview', href: '/dashboard/teacher', icon: LayoutDashboard },
-      { name: 'My Classes', href: '/dashboard/teacher/classes', icon: Users },
+      { name: 'My Classes', href: '/dashboard/teacher/class', icon: Users },
       { name: 'Profile', href: '/dashboard/teacher/profile', icon: Users },
     ],
     admin: [
