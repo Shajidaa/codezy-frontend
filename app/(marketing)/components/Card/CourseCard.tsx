@@ -29,16 +29,17 @@ const IconMap: Record<string, React.ReactNode> = {
   trending: <TrendingUp size={18} />
 };
 
-const CourseCard: React.FC<{ course: Course }> = ({ course }) => {
+const CourseCard:  React.FC<{ course: Course }> =({ course }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
     const { data: session } = useSession();
   // Use MongoDB _id if available, otherwise fall back to standard id
-  const courseId = course._id || course.id;
+  const courseId =course._id || course.id;
   const targetBookingUrl = `/booking?courseId=${courseId}`;
   
 const bookingPath = session 
     ? targetBookingUrl 
     : `/register?callbackUrl=${encodeURIComponent(targetBookingUrl)}`;
+    
   return (
     
     <Link href={`/courses/${courseId}`} className="block group">

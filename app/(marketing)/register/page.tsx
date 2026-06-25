@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, Suspense } from 'react'; // Added Suspense here
+import React, { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { GraduationCap, Presentation, ArrowRight, Sparkles, Loader2, Eye, EyeOff, Mail, Lock, User, Briefcase } from 'lucide-react';
@@ -41,7 +41,6 @@ const BrandSection = () => (
   </div>
 );
 
-// 1. Move all registration form logic to a sub-component that safely consumes the search parameters
 function RegisterForm() {
   const router = useRouter();
   const searchParams = useSearchParams(); 
@@ -65,6 +64,9 @@ function RegisterForm() {
     e.preventDefault();
     setIsLoading(true);
 
+ 
+    const callbackUrl = searchParams.get("callbackUrl") || (role === 'teacher' ? "/dashboard/teacher" : "/dashboard/student");
+
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/register`, {
         method: "POST",
@@ -78,24 +80,13 @@ function RegisterForm() {
       const result = await signIn("credentials", {
         email: formData.email,
         password: formData.password,
-        redirect: false, 
+      
+        callbackUrl: callbackUrl, 
       });
 
       if (result?.ok) {
         toast.success(`Welcome, ${formData.name}!`);
-        
-        const callbackUrl = searchParams.get("callbackUrl");
-        
-        if (callbackUrl) {
-          router.push(callbackUrl);
-        } else {
-          if (role === 'teacher') {
-            router.push("/dashboard/teacher");
-          } else {
-            router.push("/dashboard/student");
-          }
-        }
-        
+        router.push(callbackUrl); 
       } else {
         throw new Error("Automatic login failed. Please sign in manually.");
       }
@@ -240,7 +231,6 @@ function RegisterForm() {
   );
 }
 
-// 2. The Main Page export wraps everything perfectly inside a dynamic Suspense boundary for Next production building
 export default function RegisterPage() {
   return (
     <div className="relative min-h-screen bg-[#FDFDFD] dark:bg-[#1e1b1c] flex items-center justify-center p-4 md:pb-28 md:pt-28 font-sans transition-colors duration-300">
@@ -261,7 +251,7 @@ export default function RegisterPage() {
   );
 }
 
-// --- Helpers remain exactly the same ---
+// --- Helpers ---
 function RoleButton({ active, onClick, icon, label }: { active: boolean; onClick: () => void; icon: React.ReactNode; label: string }) {
   return (
     <button 
