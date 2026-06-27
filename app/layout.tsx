@@ -3,8 +3,9 @@
 import {  Poppins } from "next/font/google";
 import "./globals.css";
 import { SessionProvider } from "next-auth/react";
-  import { ToastContainer } from 'react-toastify';
 import WhatsAppWidget from "./(marketing)/components/WhatsAppWidget";
+import { Toaster } from "react-hot-toast";
+import { ToastContainer } from "react-toastify";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -29,7 +30,18 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col"><SessionProvider>
           {children}
           <WhatsAppWidget />
-           <ToastContainer />
+               <ToastContainer
+            position="top-right"
+            autoClose={3000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="light"
+          />
         </SessionProvider>
        
         </body>
