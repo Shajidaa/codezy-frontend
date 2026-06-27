@@ -40,6 +40,7 @@ export default function Find() {
 
 
   if (loading) return <div className="p-10 text-[#EEB30D] font-bold animate-pulse">Loading tutors...</div>;
+console.log(data);
 
   return (
     <div className="p-6 bg-[#FFFFFF]">

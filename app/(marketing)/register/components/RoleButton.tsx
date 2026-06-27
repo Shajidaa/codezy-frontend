@@ -13,7 +13,7 @@ export function RoleButton({ active, onClick, icon, label }: RoleButtonProps) {
       type="button" 
       onClick={onClick} 
       className={`relative z-10 flex-1 py-3 text-sm font-bold transition-colors duration-300 flex items-center justify-center gap-2 ${
-        active ? 'text-[#393536] dark:text-white' : 'text-[#949293]'
+        active ? 'text-brand-dark dark:text-white' : 'text-brand-gray'
       }`}
     >
       {icon} 

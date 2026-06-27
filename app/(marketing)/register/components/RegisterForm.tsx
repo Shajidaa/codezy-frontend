@@ -66,7 +66,7 @@ export function RegisterForm() {
         callbackUrl: callbackUrl,
       });
 
-      console.log("SignIn result:", result);
+      // console.log("SignIn result:", result);
 
       // 3. Check if sign in was successful
       if (result?.error) {
@@ -105,7 +105,7 @@ export function RegisterForm() {
     <motion.div 
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="w-full max-w-6xl bg-white dark:bg-[#2d292a] rounded-[2.5rem] shadow-2xl border border-[#949293]/10 overflow-hidden flex flex-col lg:flex-row relative z-10"
+      className="w-full max-w-6xl bg-white dark:bg-[#2d292a] rounded-[2.5rem] shadow-2xl border border-brand-gray/10 overflow-hidden flex flex-col lg:flex-row relative z-10"
     >
       <BrandSection />
 
@@ -174,17 +174,17 @@ export function RegisterForm() {
                   exit={{ height: 0, opacity: 0, y: -10 }} 
                   className="overflow-hidden"
                 >
-                  <label className="text-[11px] font-black uppercase tracking-widest text-[#949293] mb-2 block px-1">
+                  <label className="text-[11px] font-black uppercase tracking-widest text-brand-gray mb-2 block px-1">
                     Expertise Field
                   </label>
                   <div className="relative flex items-center">
-                    <span className="absolute left-5 text-[#949293]">
+                    <span className="absolute left-5 text-brand-gray">
                       <Briefcase size={18} />
                     </span>
                     <select 
                       value={formData.expertise} 
                       onChange={(e) => updateField('expertise', e.target.value)}
-                      className="w-full pl-12 pr-5 py-4 bg-[#393536]/5 dark:bg-white/5 border-2 border-transparent rounded-2xl outline-none text-sm font-semibold text-[#393536] dark:text-white focus:border-[#EEB30D]/20 focus:bg-white dark:focus:bg-[#393536] transition-all appearance-none cursor-pointer"
+                      className="w-full pl-12 pr-5 py-4 bg-brand-dark/5 dark:bg-white/5 border-2 border-transparent rounded-2xl outline-none text-sm font-semibold text-brand-dark dark:text-white focus:border-[#EEB30D]/20 focus:bg-white dark:focus:bg-brand-dark transition-all appearance-none cursor-pointer"
                     >
                       {EXPERTISE_OPTIONS.map(option => (
                         <option key={option.value} value={option.value}>
@@ -192,7 +192,7 @@ export function RegisterForm() {
                         </option>
                       ))}
                     </select>
-                    <span className="absolute right-5 text-[#949293] pointer-events-none text-xs">▼</span>
+                    <span className="absolute right-5 text-brand-gray pointer-events-none text-xs">▼</span>
                   </div>
                 </motion.div>
               )}
@@ -201,9 +201,9 @@ export function RegisterForm() {
             <SubmitButton isLoading={isLoading} />
             
             <div className="text-center mt-4">
-              <p className="text-sm text-[#949293] font-medium">
+              <p className="text-sm text-brand-gray font-medium">
                 Do you have an account?{' '}
-                <Link href="/login" className="text-[#EEB30D] hover:underline font-bold">
+                <Link href="/login" className="text-brand-gold hover:underline font-bold">
                   Login here
                 </Link>
               </p>
@@ -219,10 +219,10 @@ export function RegisterForm() {
 function FormHeader() {
   return (
     <header className="mb-8">
-      <h1 className="text-3xl font-black text-[#393536] dark:text-white tracking-tight">
+      <h1 className="text-3xl font-black text-brand-dark dark:text-white tracking-tight">
         Create Account
       </h1>
-      <p className="text-[#949293] font-semibold mt-1">
+      <p className="text-brand-gray font-semibold mt-1">
         Start your journey today.
       </p>
     </header>
@@ -231,10 +231,10 @@ function FormHeader() {
 
 function RoleSelector({ role, setRole }: { role: UserRole; setRole: (role: UserRole) => void }) {
   return (
-    <div className="flex p-1.5 bg-[#393536]/5 dark:bg-white/5 rounded-2xl mb-8 relative border border-[#949293]/10">
+    <div className="flex p-1.5 bg-brand-dark/5 dark:bg-white/5 rounded-2xl mb-8 relative border border-brand-gray/10">
       <motion.div 
         layoutId="activeTab"
-        className="absolute inset-1.5 w-[calc(50%-6px)] bg-white dark:bg-[#393536] rounded-xl shadow-md"
+        className="absolute inset-1.5 w-[calc(50%-6px)] bg-white dark:bg-brand-dark rounded-xl shadow-md"
         transition={{ type: "spring", bounce: 0.15, duration: 0.5 }}
         style={{ left: role === 'student' ? '6px' : 'calc(50%)' }}
       />
@@ -260,10 +260,10 @@ function SubmitButton({ isLoading }: { isLoading: boolean }) {
       disabled={isLoading}
       whileHover={{ scale: 1.005 }}
       whileTap={{ scale: 0.995 }}
-      className="w-full bg-[#EEB30D] text-[#393536] font-black py-4.5 rounded-2xl shadow-lg shadow-[#EEB30D]/10 hover:bg-opacity-90 transition-all flex items-center justify-center gap-3 disabled:opacity-50 min-h-[56px] text-sm uppercase tracking-wider mt-2"
+      className="w-full bg-[#EEB30D] text-brand-dark font-black py-4.5 rounded-2xl shadow-lg shadow-[#EEB30D]/10 hover:bg-opacity-90 transition-all flex items-center justify-center gap-3 disabled:opacity-50 min-h-[56px] text-sm uppercase tracking-wider mt-2"
     >
       {isLoading ? (
-        <Loader2 className="animate-spin text-[#393536]" size={20} />
+        <Loader2 className="animate-spin text-brand-dark" size={20} />
       ) : (
         <>Get Started <ArrowRight size={18} strokeWidth={2.5} /></>
       )}
