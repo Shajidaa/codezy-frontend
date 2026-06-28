@@ -42,6 +42,9 @@ export interface Tutor {
   verified: boolean;
   createdAt: string;
   updated_at: string;
+  education?: Education[];
+  subjects?: Subject[];
+  experience?: Experience[];
 }
 
 export interface CalendlyEventData {

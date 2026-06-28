@@ -225,13 +225,14 @@ export default function TutorProfilePage() {
   }
 
   const profile = tutor.profile || {};
-  const subjects = profile.subjects || [];
-  const education = profile.education || [];
-  const experience = profile.experience || [];
+  const subjects = tutor.subjects || [];
+  const education = tutor.education || [];
+  const experience = tutor.experience || [];
   const imageUrl = profile.image || tutor.image || '/images/default-avatar.jpg';
   const isVerified = profile.verified || tutor.verified || false;
   const rating = profile.rating || tutor.rating || 0;
   const reviewCount = profile.totalReviews || tutor.totalReviews || 0;
+// console.log(tutor.experience);
 
   // ===== RENDER =====
   return (

@@ -40,10 +40,10 @@ export default function Find() {
 
 
   if (loading) return <div className="p-10 text-[#EEB30D] font-bold animate-pulse">Loading tutors...</div>;
-console.log(data);
+
 
   return (
-    <div className="p-6 bg-[#FFFFFF]">
+    <div className="p-6 bg-brand-white">
       <div className='flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4'>
         <h1 className="text-2xl font-bold text-[#393536] border-b-4 border-[#EEB30D] pb-1">
           Find Your Tutor
