@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { toast } from "react-toastify";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
@@ -13,35 +12,53 @@ export default function ProfessionalBookingForm() {
   const [currentStep, setCurrentStep] = useState(1);
   const [hasActiveBooking, setHasActiveBooking] = useState(false);
   const [checkingBooking, setCheckingBooking] = useState(true);
+  const [bookingDetails, setBookingDetails] = useState<{
+    bookingDate?: string;
+    bookingTime?: string;
+    instructorName?: string;
+  }>({});
 
   const { data: session, status } = useSession();
   const router = useRouter();
 
-  // ১. অথেন্টিকেশন চেক
+  // Redirect unauthenticated users to registration
   useEffect(() => {
     if (status === "unauthenticated") {
       router.push("/register?callbackUrl=/booking");
     }
   }, [status, router]);
 
-  // ২. বুকিং স্ট্যাটাস চেক (ইউজার আগে বুক করেছে কিনা এবং ক্লাস শেষ হয়েছে কিনা)
+  // Check if user has an active booking
   useEffect(() => {
     const checkUserBooking = async () => {
-      if (status !== "authenticated" || !session?.user?.email) return;
+      if (status !== "authenticated" || !session?.user?.email) {
+        setCheckingBooking(false);
+        return;
+      }
 
       try {
-        // আপনার ব্যাকএন্ড এপিআই এন্ডপয়েন্ট এখানে বসাবেন
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/bookings/check-status?email=${session.user.email}`
+          `${process.env.NEXT_PUBLIC_API_URL}/api/bookings/check-status?email=${encodeURIComponent(
+            session.user.email
+          )}`
         );
+
+        if (!response.ok) {
+          throw new Error("Failed to check booking status");
+        }
+
         const data = await response.json();
 
-        // যদি ব্যাকএন্ড থেকে রিটার্ন করে যে একটিভ ক্লাস আছে
         if (data.hasActiveBooking) {
           setHasActiveBooking(true);
+          // Store booking details if available
+          if (data.bookingDetails) {
+            setBookingDetails(data.bookingDetails);
+          }
         }
       } catch (error) {
         console.error("Booking status check failed:", error);
+        // Optionally show error toast/notification here
       } finally {
         setCheckingBooking(false);
       }
@@ -50,41 +67,78 @@ export default function ProfessionalBookingForm() {
     checkUserBooking();
   }, [status, session]);
 
-  // লোডিং স্টেট দেখানোর জন্য
+  // Loading state
   if (status === "loading" || checkingBooking) {
     return (
       <div className="flex justify-center items-center min-h-[50vh] text-white">
-        <p className="animate-pulse font-medium">Loading details, please wait...</p>
-      </div>
-    );
-  }
-
-  // ৩. যদি অলরেডি বুকিং থাকে এবং ক্লাস শেষ না হয়, তবে এই ইন্টারফেসটি দেখাবে
-  if (hasActiveBooking) {
-    return (
-      <div className="max-w-xl mx-auto my-12 px-4 font-sans">
-        <div className="rounded-3xl shadow-2xl p-8 bg-[#393536] border-t-8 border-red-500 text-center space-y-6">
-          <div className="inline-flex items-center justify-center bg-red-500/10 p-4 rounded-full text-red-500">
-            <HiLockClosed className="w-12 h-12" />
-          </div>
-          <h2 className="text-2xl font-bold text-white">আপনি ইতিমধ্যে একটি স্লট বুক করেছেন!</h2>
-          <p className="text-slate-300 text-sm leading-relaxed">
-            আপনার বর্তমান ক্লাসটি সম্পূর্ণ শেষ না হওয়া পর্যন্ত একই ইমেইল (<span className="text-[#EEB30D] font-semibold">{session?.user?.email}</span>) দিয়ে নতুন কোনো ক্লাস বা স্লট বুক করা যাবে না।
+        <div className="text-center space-y-4">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#EEB30D] mx-auto"></div>
+          <p className="animate-pulse font-medium text-gray-300">
+            Loading details, please wait...
           </p>
-          <div className="pt-4">
-            <Link
-              href="/"
-              className="inline-flex items-center justify-center bg-[#EEB30D] text-[#393536] font-bold px-6 py-2.5 rounded-xl hover:bg-yellow-500 transition-all text-sm"
-            >
-              ড্যাশবোর্ডে ফিরে যান
-            </Link>
-          </div>
         </div>
       </div>
     );
   }
 
-  // ৪. মেইন বুকিং ফর্ম (যদি বুকিং না থাকে)
+  // Show message if user already has an active booking
+  if (hasActiveBooking) {
+    return (
+      <div className="max-w-xl mx-auto my-12 px-4 font-sans">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="rounded-3xl shadow-2xl p-8 bg-[#393536] border-t-8 border-red-500 text-center space-y-6"
+        >
+          <div className="inline-flex items-center justify-center bg-red-500/10 p-4 rounded-full text-red-500">
+            <HiLockClosed className="w-12 h-12" />
+          </div>
+          <h2 className="text-2xl font-bold text-white">
+            আপনি ইতিমধ্যে একটি স্লট বুক করেছেন! 🚫
+          </h2>
+          <p className="text-slate-300 text-sm leading-relaxed">
+            আপনার বর্তমান ক্লাসটি সম্পূর্ণ শেষ না হওয়া পর্যন্ত একই ইমেইল (
+            <span className="text-[#EEB30D] font-semibold">
+              {session?.user?.email}
+            </span>
+            ) দিয়ে নতুন কোনো ক্লাস বা স্লট বুক করা যাবে না।
+          </p>
+
+          {/* Show existing booking details if available */}
+          {bookingDetails.bookingDate && (
+            <div className="bg-slate-800/50 rounded-xl p-4 text-left space-y-2">
+              <p className="text-xs text-gray-400">আপনার বর্তমান বুকিং তথ্য:</p>
+              <div className="text-sm text-white space-y-1">
+                {bookingDetails.bookingDate && (
+                  <p>📅 তারিখ: {new Date(bookingDetails.bookingDate).toLocaleDateString('bn-BD')}</p>
+                )}
+                {bookingDetails.bookingTime && (
+                  <p>⏰ সময়: {bookingDetails.bookingTime}</p>
+                )}
+                {bookingDetails.instructorName && (
+                  <p>👨‍🏫 শিক্ষক: {bookingDetails.instructorName}</p>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* <div className="pt-4 space-y-3">
+            <Link
+              href="/dashboard"
+              className="inline-flex items-center justify-center bg-[#EEB30D] text-[#393536] font-bold px-6 py-2.5 rounded-xl hover:bg-yellow-500 transition-all text-sm w-full"
+            >
+              ড্যাশবোর্ডে ফিরে যান
+            </Link>
+           
+          </div> */}
+
+        
+        </motion.div>
+      </div>
+    );
+  }
+
+  // Main booking form
   return (
     <div className="max-w-5xl mx-auto my-12 px-4 font-sans">
       <AnimatePresence mode="wait">
@@ -112,6 +166,11 @@ export default function ProfessionalBookingForm() {
                   <p className="text-sm text-slate-400 mt-2 font-medium">
                     It helps us understand your child&rsquo;s needs better before booking.
                   </p>
+                  <div className="mt-3 inline-flex items-center gap-2 bg-amber-500/10 px-3 py-1.5 rounded-full">
+                    <span className="text-amber-400 text-xs font-semibold">
+                      ⚡ আপনার ইমেইল: {session?.user?.email}
+                    </span>
+                  </div>
                 </header>
 
                 <div className="w-full bg-white shadow-sm rounded-3xl overflow-hidden p-4 border border-slate-200">
@@ -131,7 +190,8 @@ export default function ProfessionalBookingForm() {
                     onClick={() => setCurrentStep(2)}
                     className="inline-flex items-center gap-2 bg-[#EEB30D] text-gray-900 font-bold px-8 py-3 rounded-xl hover:bg-yellow-500 transition-all shadow-md"
                   >
-                    I&rsquo;ve filled the form, Continue to Booking <HiArrowRight className="w-5 h-5" />
+                    I&rsquo;ve filled the form, Continue to Booking{" "}
+                    <HiArrowRight className="w-5 h-5" />
                   </button>
                 </div>
               </div>
@@ -153,6 +213,9 @@ export default function ProfessionalBookingForm() {
                 <p className="text-xs text-gray-300 mt-1">
                   Complete your registration by selecting a verified slot on the calendar.
                 </p>
+                <p className="text-xs text-amber-400 mt-2">
+                  📧 Booking with: {session?.user?.email}
+                </p>
               </div>
               <button
                 onClick={() => setCurrentStep(1)}
@@ -173,6 +236,10 @@ export default function ProfessionalBookingForm() {
                   primaryColor: "EEB30D",
                   textColor: "393536",
                 }}
+                prefill={{
+                  email: session?.user?.email || "",
+                  name: session?.user?.name || "",
+                }}
               />
             </div>
 
@@ -184,12 +251,19 @@ export default function ProfessionalBookingForm() {
                 <div className="flex items-center gap-3 text-slate-700 font-bold text-xs">
                   <HiCheckCircle className="text-[#EEB30D] w-4 h-4" /> 1-on-1 personalized dedicated workspace
                 </div>
+                <div className="flex items-center gap-3 text-slate-700 font-bold text-xs">
+                  <HiCheckCircle className="text-[#EEB30D] w-4 h-4" /> একই ইমেইল দিয়ে একবারই বুকিং করা যাবে
+                </div>
               </div>
 
               <div className="bg-amber-50/60 border-l-4 border-[#EEB30D] p-4 rounded-r-2xl flex items-start gap-2">
                 <HiClock className="text-[#EEB30D] w-5 h-5 flex-shrink-0 mt-0.5" />
                 <p className="text-[11px] text-slate-600 leading-relaxed">
                   <strong>Important Notice:</strong> Your assigned professional instructor blocks off this specific slot explicitly for you. Please attend promptly.
+                  <br />
+                  <span className="text-amber-600 font-semibold mt-1 block">
+                    ⚠️ একবার বুকিং করলে আর বুকিং করা যাবে না।
+                  </span>
                 </p>
               </div>
             </div>
