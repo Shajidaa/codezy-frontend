@@ -122,15 +122,7 @@ export default function ProfessionalBookingForm() {
             </div>
           )}
 
-          {/* <div className="pt-4 space-y-3">
-            <Link
-              href="/dashboard"
-              className="inline-flex items-center justify-center bg-[#EEB30D] text-[#393536] font-bold px-6 py-2.5 rounded-xl hover:bg-yellow-500 transition-all text-sm w-full"
-            >
-              ড্যাশবোর্ডে ফিরে যান
-            </Link>
-           
-          </div> */}
+       
 
         
         </motion.div>
