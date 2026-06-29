@@ -8,11 +8,13 @@ import { usePathname } from 'next/navigation';
 
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const { data: session } = useSession();
+  const { data: session,status } = useSession();
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const pathname = usePathname();
-
-  const userRole = session?.user?.role || 'student';
+if (status === "loading") {
+  return <p>Loading..........</p>
+}
+  const userRole = session?.user?.role ;
 
 //  console.log(session);
  
