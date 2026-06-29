@@ -8,6 +8,7 @@ import { Terminal, Code2, Cpu, Laptop, Binary, Brackets, Blocks, Database, Arrow
 import Link from 'next/link';
 
 export default function HeroSection() {
+  
   return (
     <section className="relative w-full overflow-hidden bg-brand-white">
       {/* Main Container */}
@@ -90,7 +91,7 @@ export default function HeroSection() {
           </div>
 
           {/* Sparkle Particles */}
-          {[...Array(12)].map((_, i) => (
+          {/* {[...Array(12)].map((_, i) => (
             <div
               key={i}
               className="absolute animate-sparkle"
@@ -103,7 +104,7 @@ export default function HeroSection() {
             >
               <Sparkles size={12 + Math.random() * 8} className="text-brand-gold opacity-90" />
             </div>
-          ))}
+          ))} */}
 
           {/* Center Pulse Effect */}
           <div className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 animate-pulse-ring">

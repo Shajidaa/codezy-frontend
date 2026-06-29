@@ -54,7 +54,7 @@ export default function EnrollPage({ searchParams }: PageProps) {
   const [isSuccess, setIsSuccess] = useState(false);
 
   const priceSymbol = currentCurrency === "BDT" ? "৳" : "$";
-  const priceAmount = currentCurrency === "BDT" ? planData.priceBDT : planData.priceUSD;
+  const priceAmount = currentCurrency === "BDT" ? planData.priceBDT : planData?.priceUSD;
   const priceLabel = `${priceSymbol}${priceAmount}`;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -370,10 +370,10 @@ export default function EnrollPage({ searchParams }: PageProps) {
               </div>
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 className="text-2xl font-black tracking-tight">{planData.title}</h2>
-                  <span className="text-xs text-neutral-400 mt-0.5 block font-medium">{planData.label}</span>
+                  <h2 className="text-2xl font-black tracking-tight">{planData?.title}</h2>
+                  <span className="text-xs text-neutral-400 mt-0.5 block font-medium">{planData?.label}</span>
                 </div>
-                <span className="text-2xl bg-white/5 p-2 rounded-xl">{planData.icon}</span>
+                <span className="text-2xl bg-white/5 p-2 rounded-xl">{planData?.icon}</span>
               </div>
             </div>
 
@@ -385,7 +385,7 @@ export default function EnrollPage({ searchParams }: PageProps) {
                 <Calendar size={12} className="text-brand-gold" /> ৩ মাসের রোডম্যাপ প্ল্যান
               </h3>
               <div className="space-y-2 max-h-[180px] overflow-y-auto pr-1 custom-scrollbar">
-                {planData.plan.map((step, idx) => (
+                {planData?.plan.map((step, idx) => (
                   <div key={idx} className="bg-black/20 border border-white/5 p-2.5 rounded-lg text-xs">
                     <div className="flex justify-between font-bold text-white mb-0.5">
                       <span>{step.month}</span>
@@ -417,10 +417,10 @@ export default function EnrollPage({ searchParams }: PageProps) {
             </div>
 
             {/* Extra Benefits Reminder */}
-            {planData.additional && (
+            {planData?.additional && (
               <div className="bg-brand-gold/5 border border-brand-gold/10 rounded-xl p-4 text-xs text-neutral-400">
                 <span className="font-bold text-brand-gold block mb-1">🎁 কোর্সের সাথে ফ্রিতে পাচ্ছেন:</span>
-                {planData.additional}
+                {planData?.additional}
               </div>
             )}
           </div>
