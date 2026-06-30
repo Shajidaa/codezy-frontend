@@ -122,7 +122,7 @@ if (status === "loading") {
         </header>
 
         {/* Page Content */}
-        <div className="p-8 overflow-y-auto">
+        <div className="p-8 bg-[var(--color-brand-dark)]/40 text-[var(--color-brand-white)] overflow-y-auto">
           {children}
         </div>
       </main>

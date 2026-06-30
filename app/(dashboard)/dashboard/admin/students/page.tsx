@@ -95,15 +95,15 @@ export default function StudentAdminPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--color-brand-dark)] text-[var(--color-brand-white)] p-8">
-      <div className="max-w-7xl mx-auto">
+    <div className=" min-h-screen ">
+      <div className="max-w-7xl mx-auto  ">
         
         {/* Header Section */}
         <header className="mb-8 border-b border-[var(--color-brand-gray)]/20 pb-5">
           <h1 className="text-3xl font-extrabold tracking-tight text-[var(--color-brand-gold)]">
-            Admin Dashboard
+           All Student Details
           </h1>
-          <p className="mt-2 text-sm text-[var(--color-brand-gray)]">
+          <p className="mt-2 text-sm text-black">
             Manage your registered student profiles, check metadata controls, and handle filtered parameters.
           </p>
         </header>
@@ -112,7 +112,7 @@ export default function StudentAdminPage() {
         <div className="mb-6 flex flex-col sm:flex-row gap-4 items-stretch sm:items-center justify-between">
           
           {/* Search Box Control */}
-          <div className="relative flex-1 max-w-md">
+          <div className="relative bg-[var(--color-brand-dark)] flex-1  max-w-md">
             <input
               type="text"
               placeholder="Search by name or email..."
@@ -131,8 +131,8 @@ export default function StudentAdminPage() {
           </div>
 
           {/* Limit / Total Control */}
-          <div className="flex items-center gap-2 self-end sm:self-auto">
-            <label htmlFor="limitSelector" className="text-xs text-[var(--color-brand-gray)] whitespace-nowrap">
+          <div className="flex items-center  gap-2 self-end sm:self-auto">
+            <label htmlFor="limitSelector" className="text-xs text-black whitespace-nowrap">
               Show Items:
             </label>
             <select
@@ -169,7 +169,7 @@ export default function StudentAdminPage() {
         ) : (
           <>
             {/* Table Presentation Panel */}
-            <div className="overflow-x-auto rounded-t-xl border-x border-t border-[var(--color-brand-gray)]/20 bg-black/10 backdrop-blur-sm">
+            <div className="overflow-x-auto rounded-t-xl bg-[var(--color-brand-dark)] text-[var(--color-brand-white)] border-x border-t border-[var(--color-brand-gray)]/20  backdrop-blur-sm">
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="border-b border-[var(--color-brand-gray)]/30 bg-black/20 text-xs font-semibold uppercase tracking-wider text-[var(--color-brand-gold)]">
@@ -213,7 +213,7 @@ export default function StudentAdminPage() {
 
             {/* Pagination Dashboard Footer */}
             {pagination && (
-              <div className="flex items-center justify-between rounded-b-xl border border-[var(--color-brand-gray)]/20 bg-black/20 p-4">
+              <div className="flex items-center bg-[var(--color-brand-dark)] justify-between rounded-b-xl border border-[var(--color-brand-gray)]/20  p-4">
                 <div className="text-xs text-[var(--color-brand-gray)]">
                   Showing matches <span className="text-[var(--color-brand-white)] font-medium">{students.length}</span> of{" "}
                   <span className="text-[var(--color-brand-white)] font-medium">{pagination.totalItems}</span> entries total
