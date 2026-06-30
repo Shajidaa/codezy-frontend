@@ -450,7 +450,7 @@ export default function TutorProfilePage() {
   const subjects = tutor.subjects || [];
   const education = tutor.education || [];
   const experience = tutor.experience || [];
-  const imageUrl = profile.image || tutor.image || '/images/default-avatar.jpg';
+  const imageUrl = profile.image || tutor.image;
   const isVerified = profile.verified || tutor.verified || false;
   const rating = profile.rating || tutor.rating || 0;
   const reviewCount = profile.totalReviews || tutor.totalReviews || 0;
@@ -489,7 +489,7 @@ const userEmail = session?.user?.email ?? undefined;
               sizes="(max-width: 768px) 128px, 128px"
               onError={(e) => {
                 const target = e.target as HTMLImageElement;
-                target.src = '/images/default-avatar.jpg';
+                // target.src = '/images/default-avatar.jpg';
               }}
             />
             {isVerified && (

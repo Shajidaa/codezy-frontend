@@ -34,7 +34,7 @@ if (status === "loading") {
       { name: 'Admin Panel', href: '/dashboard/admin', icon: Settings },
       {name:"Students", href:"/dashboard/admin/students", icon: Users},
       {name:"Enrollment Students", href:"/dashboard/admin/paidStudent", icon: BookOpen},
-      { name: 'User Management', href: '/dashboard/admin/users', icon: Users },
+      { name: 'Tutors', href: '/dashboard/admin/tutors', icon: Users },
       { name: 'Course Management', href: '/dashboard/admin/courses', icon: BookOpen },
     ],
   };

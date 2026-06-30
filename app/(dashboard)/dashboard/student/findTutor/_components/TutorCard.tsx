@@ -64,7 +64,7 @@ const TutorCard = ({
   // Safe access with fallbacks
   const profile = tutor?.profile || {};
   const subjects = tutor?.subjects || [];
-  const imageUrl = profile.image || tutor?.image || '/images/default-avatar.jpg';
+  const imageUrl = profile.image || tutor?.image ;
   const displayName = tutor?.name || 'Unknown Tutor';
   const displayTitle = profile.title || tutor?.expertise || 'Professional Tutor';
   const isVerified = profile.verified || tutor?.verified || false;
@@ -93,7 +93,7 @@ const TutorCard = ({
             
             onError={(e) => {
               const target = e.target as HTMLImageElement;
-              target.src = '/images/default-avatar.jpg';
+              // target.src = '/images/default-avatar.jpg';
             }}
           />
         </div>

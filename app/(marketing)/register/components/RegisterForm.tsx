@@ -29,7 +29,7 @@ export function RegisterForm() {
     setIsLoading(true);
 
     // Validation
-    if (!formData.name || !formData.email || !formData.password) {
+    if (!formData.name || !formData.email || !formData.password ||!formData.age || !formData.school) {
       toast.error('Please fill in all required fields');
       setIsLoading(false);
       return;
@@ -43,7 +43,7 @@ export function RegisterForm() {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...formData, role }),
+        body: JSON.stringify({ ...formData, role}),
       });
 
       const data = await res.json();
