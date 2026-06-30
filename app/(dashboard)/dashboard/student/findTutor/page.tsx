@@ -13,8 +13,9 @@ export default function Find() {
     const fetchData = async () => {
       try {
         const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users/tutors`);
-        const result = Array.isArray(response.data) ? response.data : response.data.tutors;
-        setData(result || []); 
+        const result = Array.isArray(response.data.data) ? response.data.data : response.data.tutors;
+        setData(result || []);
+        console.log(response)
       } catch (error) {
         console.error('Error fetching data:', error);
       } finally {
@@ -23,6 +24,7 @@ export default function Find() {
     };
     fetchData();
   }, []);
+
 
   const filteredTutors = useMemo(() => {
     if (!searchQuery) return data;
