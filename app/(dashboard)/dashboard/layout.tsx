@@ -5,25 +5,24 @@ import { useSession } from 'next-auth/react';
 import { LayoutDashboard, BookOpen, Users, Settings, LogOut, Menu, X, Bell } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-
+import { motion } from "motion/react"
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const { data: session,status } = useSession();
+  const { data: session, status } = useSession();
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const pathname = usePathname();
-if (status === "loading") {
-  return <p>Loading..........</p>
-}
-  const userRole = session?.user?.role ;
 
-//  console.log(session);
+  if (status === "loading") {
+    return <p>Loading..........</p>
+  }
+  
+  const userRole = session?.user?.role;
  
   const navItems = {
     student: [
       { name: 'My Courses', href: '/dashboard/student', icon: BookOpen },
       { name: 'Progress', href: '/dashboard/student/progress', icon: LayoutDashboard },
       { name: 'Find Tutors', href: '/dashboard/student/findTutor', icon: LayoutDashboard },
-      
     ],
     teacher: [
       { name: 'Overview', href: '/dashboard/teacher', icon: LayoutDashboard },
@@ -32,40 +31,47 @@ if (status === "loading") {
     ],
     admin: [
       { name: 'Admin Panel', href: '/dashboard/admin', icon: Settings },
-      {name:"Students", href:"/dashboard/admin/students", icon: Users},
-      {name:"Enrollment Students", href:"/dashboard/admin/paidStudent", icon: BookOpen},
+      { name: "Students", href: "/dashboard/admin/students", icon: Users },
       { name: 'Tutors', href: '/dashboard/admin/tutors', icon: Users },
       { name: 'Course Management', href: '/dashboard/admin/courses', icon: BookOpen },
     ],
   };
 
-  const currentLinks = navItems[userRole as keyof typeof navItems];
+  const currentLinks = navItems[userRole as keyof typeof navItems] || [];
 
   return (
     <div className="min-h-screen bg-white flex">
       {/* --- Mobile Sidebar Overlay --- */}
-     
-        {/* {isSidebarOpen && (
-          <motion.div 
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            onClick={() => setSidebarOpen(false)}
-            className="fixed inset-0 bg-black/50 z-40 lg:hidden"
-          />
-        )} */}
-    
+      {isSidebarOpen && (
+        <motion.div 
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+          onClick={() => setSidebarOpen(false)}
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+        />
+      )}
 
       {/* --- Sidebar --- */}
       <aside className={`
         fixed inset-y-0 left-0 z-50 w-72 bg-brand-dark text-white transform transition-transform duration-300 ease-in-out
         lg:relative lg:translate-x-0 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
-        <div className="p-8 flex flex-col h-full">
+        <div className="p-8 flex flex-col h-full relative">
+          
+          {/* --- Mobile Close Button inside Sidebar --- */}
+          <button 
+            onClick={() => setSidebarOpen(false)} 
+            className="absolute top-6 right-6 text-white/70 hover:text-white lg:hidden"
+          >
+            <X size={24} />
+          </button>
+
           <Link href={'/'} className="flex items-center gap-3 mb-12">
             <div className="w-8 h-8 bg-brand-gold rounded flex items-center justify-center text-dark font-bold">C</div>
             <span className="text-xl font-black tracking-tighter">CODEZY</span>
           </Link>
 
-          <nav className="flex-1 space-y-2">
+          {/* Added onClick behavior to the navigation list to catch link selections */}
+          <nav className="flex-1 space-y-2" onClick={() => setSidebarOpen(false)}>
             {currentLinks.map((item) => (
               <Link
                 key={item.name}

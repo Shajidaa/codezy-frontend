@@ -97,7 +97,7 @@ export default function TutorAdminPage() {
   };
 
   return (
-    <div className="min-h-screen  p-8">
+    <div className="min-h-screen ">
       <div className="max-w-7xl mx-auto">
         
         {/* Header Section showcasing global metric */}
