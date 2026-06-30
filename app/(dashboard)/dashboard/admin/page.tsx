@@ -1,17 +1,17 @@
 "use client";
-import  { useState } from 'react';
+
+import { useState } from 'react';
+import { FaUser } from 'react-icons/fa';
 import { 
-  Users, 
-  DollarSign, 
-  GraduationCap, 
-  TrendingUp, 
-  Settings, 
-  Bell, 
-  CheckCircle, 
-  XCircle, 
-  Search,
-  SlidersHorizontal
-} from 'lucide-react';
+  FaUsers, 
+  FaMoneyCheckDollar, 
+
+  FaArrowTrendUp, 
+  FaBell, 
+  FaCheck, 
+  FaXmark, 
+  FaMagnifyingGlass 
+} from 'react-icons/fa6';
 
 // Mock Data for Dashboard
 const initialApplicants = [
@@ -35,23 +35,21 @@ export default function AdminPage() {
   );
 
   return (
-    <div className="min-h-screen bg-[#1A1818] text-brand-white flex">
+    <div className="min-h-screen  text-[#FFFFFF] flex font-sans">
       
-     
-
       {/* Main Content Area */}
-      <main className="flex-1  overflow-y-auto">
+      <main className="flex-1 p-6 lg:p-10 overflow-y-auto max-w-[1600px] mx-auto w-full">
         
         {/* Top Navbar */}
-        <header className="flex justify-between items-center mb-10 pb-6 border-b border-brand-white/5">
+        <header className="flex justify-between items-center mb-10 pb-6 border-b border-[#FFFFFF]/5">
           <div>
             <h1 className="text-2xl font-bold tracking-tight">Platform Overview</h1>
-            <p className="text-brand-gray text-sm">Real-time metrics for your ongoing launches.</p>
+            <p className="text-[#949293] text-sm">Real-time metrics for your ongoing launches.</p>
           </div>
           <div className="flex items-center gap-4">
-            <button className="p-2.5 rounded-xl border border-brand-white/5 bg-[#232121] text-brand-gray hover:text-brand-white transition-colors relative">
-              <Bell size={18} />
-              <span className="absolute top-2 right-2 w-2 h-2 bg-brand-gold rounded-full" />
+            <button className="p-2.5 rounded-xl border border-[#FFFFFF]/5 bg-[#232121] text-[#949293] hover:text-[#FFFFFF] transition-colors relative">
+              <FaBell size={18} />
+              <span className="absolute top-2 right-2 w-2 h-2 bg-[#EEB30D] rounded-full" />
             </button>
           </div>
         </header>
@@ -59,103 +57,90 @@ export default function AdminPage() {
         {/* Analytics Grid */}
         <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
           {[
-            { title: "Total Revenue", value: "৳48,000", icon: <DollarSign className="text-brand-gold" size={20} />, trend: "+12.4% from last week" },
-            { title: "Active Enrolments", value: "142 Students", icon: <Users className="text-brand-gold" size={20} />, trend: "Level-1: 68 | Level-2: 74" },
-            { title: "Conversion Rate", value: "4.8%", icon: <TrendingUp className="text-brand-gold" size={20} />, trend: "Industry Avg: 3.2%" },
-            { title: "Live Bootcamps", value: "02 Active", icon: <GraduationCap className="text-brand-gold" size={20} />, trend: "3-Month Cohorts" },
+            { title: "Total Revenue", value: "৳48,000", icon: <FaMoneyCheckDollar className="text-[#EEB30D]" size={20} />, trend: "+12.4% from last week" },
+            { title: "Active Enrolments", value: "142 Students", icon: <FaUsers className="text-[#EEB30D]" size={20} />, trend: "Level-1: 68 | Level-2: 74" },
+            { title: "Conversion Rate", value: "4.8%", icon: <FaArrowTrendUp className="text-[#EEB30D]" size={20} />, trend: "Industry Avg: 3.2%" },
+            { title: "Live Bootcamps", value: "02 Active", icon: <FaUser className="text-[#EEB30D]" size={20} />, trend: "3-Month Cohorts" },
           ].map((stat, idx) => (
-            <div key={idx} className="bg-[#232121] border border-brand-white/5 rounded-2xl p-6 relative overflow-hidden">
+            <div key={idx} className="bg-[#232121] border border-[#FFFFFF]/5 rounded-2xl p-6 relative overflow-hidden">
               <div className="flex justify-between items-center mb-4">
-                <span className="text-xs font-semibold uppercase tracking-widest text-brand-gray">{stat.title}</span>
-                <div className="w-8 h-8 rounded-lg bg-brand-white/5 flex items-center justify-center">{stat.icon}</div>
+                <span className="text-xs font-semibold uppercase tracking-widest text-[#949293]">{stat.title}</span>
+                <div className="w-8 h-8 rounded-lg bg-[#FFFFFF]/5 flex items-center justify-center">{stat.icon}</div>
               </div>
               <div className="text-2xl font-bold mb-2 tracking-tight">{stat.value}</div>
-              <div className="text-xs text-brand-gray font-light">{stat.trend}</div>
+              <div className="text-xs text-[#949293] font-light">{stat.trend}</div>
             </div>
           ))}
         </section>
 
         {/* Live Applicant Management Table */}
-        <section className="bg-[#232121] border border-brand-white/5 rounded-2xl overflow-hidden">
-          <div className="p-6 border-b border-brand-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <section className="bg-[#232121] border border-[#FFFFFF]/5 rounded-2xl overflow-hidden">
+          <div className="p-6 border-b border-[#FFFFFF]/5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <h3 className="font-bold text-lg">Recent Course Applications</h3>
             <div className="relative max-w-xs w-full">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-brand-gray" size={16} />
+              <FaMagnifyingGlass className="absolute left-3 top-1/2 -translate-y-1/2 text-[#949293]" size={16} />
               <input 
                 type="text" 
                 placeholder="Search name or email..." 
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-9 pr-4 py-2 bg-[#1A1818] border border-brand-white/5 rounded-xl text-sm focus:outline-none focus:border-brand-gold/50 transition-colors text-brand-white placeholder-brand-gray/60"
+                className="w-full pl-9 pr-4 py-2 bg-[#1A1818] border border-[#FFFFFF]/5 rounded-xl text-sm focus:outline-none focus:border-[#EEB30D]/50 transition-colors text-[#FFFFFF] placeholder-[#949293]/60"
               />
             </div>
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm border-collapse">
+            <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="bg-[#1A1818]/50 text-brand-gray border-b border-brand-white/5">
-                  <th className="p-4 font-medium">Applicant Details</th>
-                  <th className="p-4 font-medium">Target Level</th>
-                  <th className="p-4 font-medium">Fee Amount</th>
-                  <th className="p-4 font-medium">Payment Status</th>
-                  <th className="p-4 font-medium text-right">Actions</th>
+                <tr className="bg-[#1A1818] border-b border-[#FFFFFF]/5 text-xs font-semibold uppercase tracking-wider text-[#949293]">
+                  <th className="p-5">Applicant</th>
+                  <th className="p-5">Cohort Level</th>
+                  <th className="p-5">Amount</th>
+                  <th className="p-5">Date</th>
+                  <th className="p-5">Status</th>
+                  <th className="p-5 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-brand-white/5">
+              <tbody className="divide-y divide-[#FFFFFF]/5 text-sm">
                 {filteredApplicants.map((app) => (
-                  <tr key={app.id} className="hover:bg-brand-white/[0.01] transition-colors">
-                    <td className="p-4">
-                      <div className="font-semibold text-brand-white">{app.name}</div>
-                      <div className="text-xs text-brand-gray">{app.email}</div>
+                  <tr key={app.id} className="hover:bg-[#FFFFFF]/2 transition-colors">
+                    <td className="p-5">
+                      <div className="font-medium text-[#FFFFFF]">{app.name}</div>
+                      <div className="text-xs text-[#949293] mt-0.5">{app.email}</div>
                     </td>
-                    <td className="p-4">
-                      <span className="px-2.5 py-1 text-xs rounded-md font-medium bg-brand-white/5 border border-brand-white/10">
-                        {app.level}
-                      </span>
-                    </td>
-                    <td className="p-4 font-medium tracking-tight">{app.amount}</td>
-                    <td className="p-4">
-                      <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 text-xs rounded-full font-medium ${
-                        app.status === 'Paid' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
-                        app.status === 'Pending' ? 'bg-brand-gold/10 text-brand-gold border border-brand-gold/20' :
-                        'bg-rose-500/10 text-rose-400 border border-rose-500/20'
+                    <td className="p-5 text-[#949293] font-medium">{app.level}</td>
+                    <td className="p-5 font-mono text-[#FFFFFF]">{app.amount}</td>
+                    <td className="p-5 text-[#949293]">{app.date}</td>
+                    <td className="p-5">
+                      <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${
+                        app.status === 'Paid' ? 'bg-emerald-500/10 text-emerald-400' :
+                        app.status === 'Pending' ? 'bg-amber-500/10 text-amber-400' : 'bg-red-500/10 text-red-400'
                       }`}>
-                        <span className={`w-1.5 h-1.5 rounded-full ${
-                          app.status === 'Paid' ? 'bg-emerald-400' :
-                          app.status === 'Pending' ? 'bg-brand-gold' :
-                          'bg-rose-400'
-                        }`} />
                         {app.status}
                       </span>
                     </td>
-                    <td className="p-4 text-right">
-                      <div className="flex items-center justify-end gap-2">
-                        <button 
-                          onClick={() => handleStatusChange(app.id, "Paid")}
-                          title="Approve & Mark Paid"
-                          className="p-1.5 rounded-lg bg-emerald-500/5 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/10 transition-colors"
-                        >
-                          <CheckCircle size={15} />
-                        </button>
-                        <button 
-                          onClick={() => handleStatusChange(app.id, "Failed")}
-                          title="Reject / Failed"
-                          className="p-1.5 rounded-lg bg-rose-500/5 hover:bg-rose-500/20 text-rose-400 border border-rose-500/10 transition-colors"
-                        >
-                          <XCircle size={15} />
-                        </button>
-                      </div>
+                    <td className="p-5 text-right space-x-2">
+                      {app.status === 'Pending' && (
+                        <>
+                          <button 
+                            onClick={() => handleStatusChange(app.id, 'Paid')}
+                            className="p-2 bg-emerald-500/10 hover:bg-emerald-500 text-emerald-400 hover:text-[#393536] rounded-xl transition-all"
+                            title="Approve"
+                          >
+                            <FaCheck size={12} />
+                          </button>
+                          <button 
+                            onClick={() => handleStatusChange(app.id, 'Failed')}
+                            className="p-2 bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-[#393536] rounded-xl transition-all"
+                            title="Reject"
+                          >
+                            <FaXmark size={12} />
+                          </button>
+                        </>
+                      )}
                     </td>
                   </tr>
                 ))}
-                {filteredApplicants.length === 0 && (
-                  <tr>
-                    <td colSpan={5} className="p-8 text-center text-brand-gray font-light">
-                      No applicants found mapping your query.
-                    </td>
-                  </tr>
-                )}
               </tbody>
             </table>
           </div>

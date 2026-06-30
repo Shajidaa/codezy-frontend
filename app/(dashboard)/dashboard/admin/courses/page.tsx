@@ -256,7 +256,7 @@ const handleDelete = async (id: string): Promise<void> => {
   }
 
   return (
-    <div className="p-6 max-w-7xl mx-auto">
+    <div className=" max-w-7xl mx-auto">
       {/* Header */}
       <div className="flex justify-between items-center mb-8">
         <div>
